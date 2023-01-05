@@ -1,0 +1,18 @@
+﻿namespace Tests.DatasourceLoader
+{
+    public class SampleData
+    {
+        public int IntProperty { get; set; }
+        public DateTime DateProperty { get; set; }
+        public string StrProperty { get; set; } = "";
+        public ICollection<string> StrCollection { get; set;} = new string[0];
+        public ICollection<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
+    }
+
+    public class SampleNestedData
+    {
+        public int IntProperty { get; set; }
+        public DateTime DateProperty { get; set; }
+        public string StrProperty { get; set; } = "";
+    }
+}
