@@ -11,55 +11,55 @@ using static System.Linq.Expressions.Expression;
 
 namespace DatasourceLoader.Filters
 {
-    public class TextFilter : FilterBase
+    public class TextFilter<T> : FilterBase<T>
     {
+        private PropertyInfo? targetField = null;
+        private ParameterExpression prm;
+        private ConstantExpression? value = null;
         public TextFilter(FilterCriteria criteria) : base(criteria)
         {
-        }
-
-        public  override IQueryable<T> Contains<T>(IQueryable<T> source)
-        {
-            if (string.IsNullOrEmpty(criteria.TextValue)) { return source; }
             Type elementType = typeof(T);
 
-            var targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
+            targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
+            prm = Parameter(elementType);
+            if(criteria.TextValue != null) value = Constant(criteria.TextValue.ToUpper());
+        }
 
-            if (targetField == null) return source;
+        public  override IQueryable<T> Contains(IQueryable<T> source)
+        {
+            if (targetField == null || value == null) return source;
             MethodInfo containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
-            ParameterExpression prm = Parameter(elementType);
+
             Expression exp = Call(
-                            Call( // <=== this one is new
-                                Property(prm, targetField),
-                                "ToUpper", null
-                            ),
-                            containsMethod,
-                            Constant(criteria.TextValue.ToUpper())
+                                Call( 
+                                    Property(prm, targetField),
+                                    "ToUpper", null
+                                ),
+                                containsMethod,
+                                value
                             );
             Expression<Func<T, bool>> lambda = Lambda<Func<T, bool>>(exp, prm);
 
             return source.Where(lambda);
         }
 
-        public  override IQueryable<T> Equal<T>(IQueryable<T> query)
+        public  override IQueryable<T> Equal(IQueryable<T> source)
         {
-            if (string.IsNullOrEmpty(criteria.TextValue)) { return query; }
-            Type elementType = typeof(T);
-            var targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
-            if (targetField == null) return query;
-            ParameterExpression prm = Parameter(elementType);
+            if (targetField == null || value == null) return source;
+
             Expression exp = Expression.Equal(
-                                Call( // <=== this one is new
+                                Call( 
                                     Property(prm, targetField),
                                     "ToUpper", null
                                 ),
-                                Constant(criteria.TextValue.ToUpper())
+                                value
                             );
             Expression<Func<T, bool>> lambda = Lambda<Func<T, bool>>(exp, prm);
-            return query.Where(lambda);
+            return source.Where(lambda);
 
         }
 
-        public IQueryable<T> AllFieldTextFilter<T>(IQueryable<T> source, string term)
+        public IQueryable<T> AllFieldTextFilter(IQueryable<T> source, string term)
         {
             if (string.IsNullOrEmpty(term)) { return source; }
 
@@ -108,22 +108,22 @@ namespace DatasourceLoader.Filters
             return source.Where(lambda);
         }
 
-        public override IQueryable<T> GreaterThan<T>(IQueryable<T> source)
+        public override IQueryable<T> GreaterThan(IQueryable<T> source)
         {
             throw new NotImplementedException();
         }
 
-        public override IQueryable<T> GreaterThanOrEqual<T>(IQueryable<T> source)
+        public override IQueryable<T> GreaterThanOrEqual(IQueryable<T> source)
         {
             throw new NotImplementedException();
         }
 
-        public override IQueryable<T> LessThan<T>(IQueryable<T> source)
+        public override IQueryable<T> LessThan(IQueryable<T> source)
         {
             throw new NotImplementedException();
         }
 
-        public override IQueryable<T> LessThanOrEqual<T>(IQueryable<T> source)
+        public override IQueryable<T> LessThanOrEqual(IQueryable<T> source)
         {
             throw new NotImplementedException();
         }

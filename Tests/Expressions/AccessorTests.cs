@@ -30,6 +30,16 @@ namespace Tests.Expressions
             {
                 Assert.Equal("a",r);
             });
+
+
+            Expression sel1 = Accessor.SelectExpression(prm, "StrProperty");
+
+            res = data.Select(sel);
+
+            Assert.Collection(res, (r) =>
+            {
+                Assert.Equal("a", r);
+            });
         }
 
         

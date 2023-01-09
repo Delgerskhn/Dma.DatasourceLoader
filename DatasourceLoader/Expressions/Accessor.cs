@@ -13,5 +13,10 @@ namespace DatasourceLoader.Expressions
         {
             return Expression.Lambda<Func<TSrc, TDest>>(Expression.Property(source, fieldName), source);
         }
+
+        public static LambdaExpression SelectExpression(ParameterExpression source, string fieldName)
+        {
+            return Expression.Lambda(Expression.Property(source, fieldName), source);
+        }
     }
 }

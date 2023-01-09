@@ -4,7 +4,7 @@ namespace DatasourceLoader.Filters
 {
     public static class FilterBaseExtensions
     {
-        public static IQueryable<T> ApplyFilter<T>(this FilterBase filter, IQueryable<T> query)
+        public static IQueryable<T> ApplyFilter<T>(this FilterBase<T> filter, IQueryable<T> query)
         {
             var q = filter.criteria.FilterType switch
             {

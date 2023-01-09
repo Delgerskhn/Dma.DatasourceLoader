@@ -17,30 +17,18 @@ namespace DatasourceLoader
         public static IQueryable<T> Load<T>(IQueryable<T> query, DataSourceLoadOptions options) where T : class
         {
             query = LoadFilters(query, options.Filters);
-            query = ApplyOrders(query, options.Sorter);
+            query = ApplyOrders(query, options.Orders);
             return query;
         }
 
-        private static IQueryable<T> LoadFilters<T>(IQueryable<T> query, List<FilterCriteria> filters)
+        public static IQueryable<T> LoadFilters<T>(IQueryable<T> query, List<FilterCriteria> filters)
         {
-            //filters.ForEach(f =>
-            //{
-            //    query = f.Type switch
-            //    {
-            //        FilterCriteriaType.Text => TextFilters.SingleFieldTextFilter(query, f),
-            //        FilterCriteriaType.Eq => f.DateValue != null ? DateFilters.Equal(query, f) : NumericFilters.Equal(query, f),
-            //        FilterCriteriaType.GtThan => f.DateValue != null ? DateFilters.GreaterThan(query, f) : NumericFilters.GreaterThan(query, f),
-            //        FilterCriteriaType.GtThanOrEq => f.DateValue != null ? DateFilters.GreaterThanOrEqual(query, f) : NumericFilters.GreaterThanOrEqual(query, f),
-            //        FilterCriteriaType.LessThan => f.DateValue != null ? DateFilters.LessThan(query, f) : NumericFilters.LessThan(query, f),
-            //        FilterCriteriaType.LessThanOrEqual => f.DateValue != null ? DateFilters.LessThanOrEqual(query, f) : NumericFilters.LessThanOrEqual(query, f),
-            //        FilterCriteriaType.TextEq => TextFilters.Equal(query, f),
-            //        _ => query
-            //    };
-            //});
+            var builder = new FilterBuilder<T>(filters, query);
+            foreach (var f in builder.build()) query = f.ApplyFilter(query);
             return query;
         }
 
-        private static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, Dictionary<string, string> sorters) where T : class
+        public static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, List<(string, string)> sorters) where T : class
         {
             Type elementType = typeof(T);
             query.OrderBy(x => elementType.Name);
@@ -49,12 +37,12 @@ namespace DatasourceLoader
                 .ToArray();
             foreach (var tuple in sorters.Select((r,i)=>new {r, i}))
             {
-                var targetField = props.Where(r => r.Name == tuple.r.Key).FirstOrDefault();
-                if(! new string[] {"asc", "desc" }.Contains(tuple.r.Value)) continue;
-                string method = tuple.r.Value == "asc" && tuple.i == 0? "OrderBy" : "OrderByDescending";
+                var targetField = props.Where(r => r.Name == tuple.r.Item1).FirstOrDefault();
+                if(! new string[] {"asc", "desc" }.Contains(tuple.r.Item2)) continue;
+                string method = tuple.r.Item2 == "asc" && tuple.i == 0? "OrderBy" : "OrderByDescending";
 
-                if (tuple.r.Value == "desc" && tuple.i > 0) method = "ThenByDescending";
-                if (tuple.r.Value == "asc" && tuple.i > 0) method = "ThenBy";
+                if (tuple.r.Item2 == "desc" && tuple.i > 0) method = "ThenByDescending";
+                if (tuple.r.Item2 == "asc" && tuple.i > 0) method = "ThenBy";
 
                 if (targetField != null)
                 {

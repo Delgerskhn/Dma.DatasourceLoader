@@ -11,7 +11,7 @@ namespace DatasourceLoader.Models
 
         public string FieldName { get; set; } = string.Empty;
         public DataSourceType DataType { get; set; }
-        public DataSourceType? CollectionFieldDataType { get; set; }
+        public DataSourceType? CollectionDataType { get; set; }
         public FilterType FilterType { get; set; }
         public DateTime? DateValue { get; set; }
         public string? TextValue { get; set; } = string.Empty;

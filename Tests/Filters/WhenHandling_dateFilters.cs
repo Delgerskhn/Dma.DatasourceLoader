@@ -6,8 +6,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Tests.DatasourceLoader;
 
-namespace Tests.DatasourceLoader
+namespace Tests.Filters
 {
     public class WhenHandling_dateFilters
     {
@@ -20,15 +21,16 @@ namespace Tests.DatasourceLoader
         {
             var date = new DateTime(2020, 12, 5);
 
-            var criteria = new FilterCriteria { 
-                DataType = DataSourceType.DateTime, 
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
                 FilterType = FilterType.Equals,
-                DateValue = date, 
-                FieldName = nameof(SampleData.DateProperty) 
+                DateValue = date,
+                FieldName = nameof(SampleData.DateProperty)
             };
-            DateFilter filter = new(criteria);
+            DateFilter<SampleData> filter = new(criteria);
 
-            var res = filter.ApplyFilter<SampleData>(source.AsQueryable());
+            var res = filter.ApplyFilter(source.AsQueryable());
 
             Assert.Collection(res, (x) =>
             {
@@ -40,14 +42,15 @@ namespace Tests.DatasourceLoader
         public void ShouldApply_lessThanFilter()
         {
             var date = new DateTime(2020, 11, 5);
-            var criteria = new FilterCriteria { 
-                DataType = DataSourceType.DateTime, 
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
                 FilterType = FilterType.LessThan,
                 DateValue = date,
                 FieldName = nameof(SampleData.DateProperty)
             };
-            DateFilter filter = new(criteria);
-            var res = filter.ApplyFilter<SampleData>(source.AsQueryable());
+            DateFilter<SampleData> filter = new(criteria);
+            var res = filter.ApplyFilter(source.AsQueryable());
 
             Assert.Collection(res, (x) =>
             {
@@ -59,14 +62,15 @@ namespace Tests.DatasourceLoader
         public void ShouldApply_lessThanOrEqFilter()
         {
             var date = new DateTime(2020, 11, 5);
-            var criteria = new FilterCriteria { 
-                DataType = DataSourceType.DateTime, 
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
                 FilterType = FilterType.LessThanOrEqual,
-                DateValue = date, 
-                FieldName = nameof(SampleData.DateProperty) 
+                DateValue = date,
+                FieldName = nameof(SampleData.DateProperty)
             };
-            DateFilter filter = new(criteria);
-            var res = filter.ApplyFilter<SampleData>(source.AsQueryable());
+            DateFilter<SampleData> filter = new(criteria);
+            var res = filter.ApplyFilter(source.AsQueryable());
 
             Assert.Collection(res, (x) =>
             {
@@ -81,15 +85,16 @@ namespace Tests.DatasourceLoader
         public void ShouldApply_gtThanFilter()
         {
             var date = new DateTime(2020, 11, 5);
-            var criteria = new FilterCriteria { 
-                DataType = DataSourceType.DateTime, 
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
                 FilterType = FilterType.GreaterThan,
-                DateValue = date, 
-                FieldName = nameof(SampleData.DateProperty) 
+                DateValue = date,
+                FieldName = nameof(SampleData.DateProperty)
             };
 
-            DateFilter filter = new(criteria);
-            var res = filter.ApplyFilter<SampleData>(source.AsQueryable());
+            DateFilter<SampleData> filter = new(criteria);
+            var res = filter.ApplyFilter(source.AsQueryable());
 
             Assert.Collection(res, (x) =>
             {
@@ -101,13 +106,15 @@ namespace Tests.DatasourceLoader
         public void ShouldApply_gtThanOrEqualFilter()
         {
             var date = new DateTime(2020, 11, 5);
-            var criteria = new FilterCriteria { 
-                DataType = DataSourceType.DateTime, 
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
                 FilterType = FilterType.GreaterThanOrEqual,
-                DateValue = date, 
-                FieldName = nameof(SampleData.DateProperty) };
-            DateFilter filter = new(criteria);
-            var res = filter.ApplyFilter<SampleData>(source.AsQueryable());
+                DateValue = date,
+                FieldName = nameof(SampleData.DateProperty)
+            };
+            DateFilter<SampleData> filter = new(criteria);
+            var res = filter.ApplyFilter(source.AsQueryable());
             Assert.Collection(res, (x) =>
             {
                 Assert.Equal(new DateTime(2020, 11, 5), x.DateProperty);
