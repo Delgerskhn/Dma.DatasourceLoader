@@ -37,7 +37,7 @@ namespace DatasourceLoader.Filters
 
             LambdaExpression itemPredicate = GetPredicate(itemType);
 
-            var body = Expression.Call(
+            var body = Call(
                 typeof(Enumerable),
                 "Any",
                 new[] { itemType },
@@ -52,8 +52,8 @@ namespace DatasourceLoader.Filters
 
         private LambdaExpression GetPredicate(Type itemType)
         {
-            var item = Expression.Parameter(itemType, "e");
-            var itemProperty = Expression.Property(item, criteria.CollectionFieldName);//StrProperty
+            var item = Parameter(itemType, "e");
+            var itemProperty = Property(item, criteria.CollectionFieldName);//StrProperty
 
             if (criteria.CollectionDataType == DataSourceType.Text)
             {
