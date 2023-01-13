@@ -13,6 +13,7 @@
     <RepositoryUrl>https://github.com/delgerskhn/datasourceloader</RepositoryUrl>
     <PackageTags>IQueryable, Filters, Orders, Data source</PackageTags>
     <PackageReleaseNotes>This is a beta release for testing purpose. Not production ready.</PackageReleaseNotes>
+    <Version>$(VersionPrefix)</Version>
   </PropertyGroup>
 
   <ItemGroup>
