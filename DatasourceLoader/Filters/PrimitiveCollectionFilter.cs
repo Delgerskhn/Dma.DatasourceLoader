@@ -1,4 +1,4 @@
-﻿using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class PrimitiveCollectionFilter<T> : FilterBase<T>
     {
@@ -34,10 +34,10 @@ namespace DatasourceLoader.Filters
                 .Single(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                 .GetGenericArguments()[0];
 
-            
+
             LambdaExpression itemPredicate = GetPredicate(itemType);
 
-           
+
             var body = Expression.Call(typeof(Enumerable), "Any", new[] { itemType },
              collection, itemPredicate);
 
@@ -49,7 +49,7 @@ namespace DatasourceLoader.Filters
         private LambdaExpression GetPredicate(Type itemType)
         {
             var item = Expression.Parameter(itemType, "e");
-            if(criteria.CollectionDataType == DataSourceType.Numeric)
+            if (criteria.CollectionDataType == DataSourceType.Numeric)
                 return Lambda(Expression.Equal(item, Convert(Constant(criteria.NumericValue), itemType)), item);
             if (criteria.CollectionDataType == DataSourceType.DateTime)
             {
@@ -69,7 +69,7 @@ namespace DatasourceLoader.Filters
                             item, "ToUpper", null
                         ),
                         Constant(criteria.TextValue?.ToUpper() ?? "")
-                    ), 
+                    ),
                     item
                 );
 

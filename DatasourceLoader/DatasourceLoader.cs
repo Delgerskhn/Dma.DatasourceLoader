@@ -6,11 +6,11 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
-using DatasourceLoader.Filters;
-using DatasourceLoader.Models;
+using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader
+namespace Dma.DatasourceLoader
 {
     public class DataSourceLoader
     {
@@ -28,21 +28,21 @@ namespace DatasourceLoader
             return query;
         }
 
-        public static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, List<(string, string)> sorters) where T : class
+        public static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, List<OrderCriteria> sorters) where T : class
         {
             Type elementType = typeof(T);
             query.OrderBy(x => elementType.Name);
             PropertyInfo[] props =
                 elementType.GetProperties()
                 .ToArray();
-            foreach (var tuple in sorters.Select((r,i)=>new {r, i}))
+            foreach (var tuple in sorters.Select((r, i) => new { r, i }))
             {
-                var targetField = props.Where(r => r.Name == tuple.r.Item1).FirstOrDefault();
-                if(! new string[] {"asc", "desc" }.Contains(tuple.r.Item2)) continue;
-                string method = tuple.r.Item2 == "asc" && tuple.i == 0? "OrderBy" : "OrderByDescending";
+                var targetField = props.Where(r => r.Name == tuple.r.Selector).FirstOrDefault();
+                if (!new string[] { "asc", "desc" }.Contains(tuple.r.Desc)) continue;
+                string method = tuple.r.Desc == "asc" && tuple.i == 0 ? "OrderBy" : "OrderByDescending";
 
-                if (tuple.r.Item2 == "desc" && tuple.i > 0) method = "ThenByDescending";
-                if (tuple.r.Item2 == "asc" && tuple.i > 0) method = "ThenBy";
+                if (tuple.r.Desc == "desc" && tuple.i > 0) method = "ThenByDescending";
+                if (tuple.r.Desc == "asc" && tuple.i > 0) method = "ThenBy";
 
                 if (targetField != null)
                 {
@@ -56,7 +56,7 @@ namespace DatasourceLoader
                         new Type[] { query.ElementType, typeof(Object) },
                         query.Expression,
                         Lambda<Func<T, Object>>(conversion, new ParameterExpression[] { prm }));
-                     query = query.Provider.CreateQuery<T>(runMe);
+                    query = query.Provider.CreateQuery<T>(runMe);
                 }
 
             }

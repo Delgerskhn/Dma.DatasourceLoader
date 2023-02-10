@@ -1,11 +1,11 @@
-﻿using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class FilterBuilder<T>
     {
@@ -20,7 +20,7 @@ namespace DatasourceLoader.Filters
 
         public List<FilterBase<T>> build()
         {
-            var filters = filterCriterias.Select(r=>FilterFactory.Create<T>(r)).ToList();
+            var filters = filterCriterias.Select(r => FilterFactory.Create<T>(r)).ToList();
             return filters;
         }
     }

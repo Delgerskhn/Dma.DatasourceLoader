@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatasourceLoader.Expressions
+namespace Dma.DatasourceLoader.Expressions
 {
     public static class Accessor
     {

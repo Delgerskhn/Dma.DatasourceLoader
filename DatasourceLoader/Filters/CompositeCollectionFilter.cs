@@ -1,4 +1,4 @@
-﻿using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class CompositeCollectionFilter<T> : FilterBase<T>
     {

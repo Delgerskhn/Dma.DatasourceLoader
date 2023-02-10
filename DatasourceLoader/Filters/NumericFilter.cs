@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using DatasourceLoader.Models;
+using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class NumericFilter<T> : FilterBase<T>
     {
@@ -22,7 +22,7 @@ namespace DatasourceLoader.Filters
             prm = Parameter(elementType);
             targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
             var constant = Constant(criteria.NumericValue);
-            if(targetField!=null) value = Convert(constant, targetField.PropertyType);
+            if (targetField != null) value = Convert(constant, targetField.PropertyType);
         }
 
         public override IQueryable<T> Equal(IQueryable<T> source)

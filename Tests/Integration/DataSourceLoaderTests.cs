@@ -1,5 +1,5 @@
-﻿using DatasourceLoader;
-using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader;
+using Dma.DatasourceLoader.Models;
 using NSubstitute;
 using NSubstitute.Extensions;
 using System;
@@ -24,9 +24,16 @@ namespace Tests.Integration
                 }
         };
 
-        private List<(string, string)> orders = new List<(string, string)> {
-                ( nameof(SampleData.DateProperty), "desc" ),
-                ( nameof(SampleData.IntProperty), "asc" ),
+        private List<OrderCriteria> orders = new List<OrderCriteria> {
+            new OrderCriteria{
+                Selector = nameof(SampleData.DateProperty),
+                Desc = "desc"
+            },
+            new OrderCriteria{
+                Selector = nameof(SampleData.IntProperty),
+                Desc = "asc"
+            }
+
             };
         private List<SampleData> source = new List<SampleData> {
             new SampleData { DateProperty = new DateTime(2020, 11, 5), IntProperty = 30 },
@@ -81,7 +88,7 @@ namespace Tests.Integration
         [Fact]
         public void ShouldApplyOrder()
         {
-            
+
             var res = DataSourceLoader.ApplyOrders<SampleData>(source.AsQueryable(), orders);
             Assert.Collection(res, (r) =>
             {
@@ -103,6 +110,6 @@ namespace Tests.Integration
             });
         }
 
-      
+
     }
 }

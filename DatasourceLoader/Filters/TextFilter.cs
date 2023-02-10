@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using DatasourceLoader.Models;
+using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class TextFilter<T> : FilterBase<T>
     {
@@ -22,16 +22,16 @@ namespace DatasourceLoader.Filters
 
             targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
             prm = Parameter(elementType);
-            if(criteria.TextValue != null) value = Constant(criteria.TextValue.ToUpper());
+            if (criteria.TextValue != null) value = Constant(criteria.TextValue.ToUpper());
         }
 
-        public  override IQueryable<T> Contains(IQueryable<T> source)
+        public override IQueryable<T> Contains(IQueryable<T> source)
         {
             if (targetField == null || value == null) return source;
             MethodInfo containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
 
             Expression exp = Call(
-                                Call( 
+                                Call(
                                     Property(prm, targetField),
                                     "ToUpper", null
                                 ),
@@ -43,12 +43,12 @@ namespace DatasourceLoader.Filters
             return source.Where(lambda);
         }
 
-        public  override IQueryable<T> Equal(IQueryable<T> source)
+        public override IQueryable<T> Equal(IQueryable<T> source)
         {
             if (targetField == null || value == null) return source;
 
             Expression exp = Expression.Equal(
-                                Call( 
+                                Call(
                                     Property(prm, targetField),
                                     "ToUpper", null
                                 ),

@@ -1,5 +1,5 @@
-﻿using DatasourceLoader.Filters;
-using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +24,7 @@ namespace Tests.Filters
                 DateValue = new DateTime(2022, 12, 12),
                 NumericValue = 32,
                 FieldName = nameof(SampleData.StrCollection)
-            }; 
+            };
         }
 
         private static List<SampleData> source = new List<SampleData> {

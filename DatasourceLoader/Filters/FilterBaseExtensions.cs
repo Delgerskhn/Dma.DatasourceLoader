@@ -1,6 +1,6 @@
-﻿using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Models;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public static class FilterBaseExtensions
     {

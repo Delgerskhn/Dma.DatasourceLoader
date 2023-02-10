@@ -1,11 +1,11 @@
-﻿using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class FilterFactory
     {

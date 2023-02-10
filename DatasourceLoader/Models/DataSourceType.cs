@@ -1,4 +1,4 @@
-﻿namespace DatasourceLoader.Models
+﻿namespace Dma.DatasourceLoader.Models
 {
     public enum DataSourceType
     {

@@ -6,10 +6,10 @@ using System.Reflection;
 using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
-using DatasourceLoader.Models;
+using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters
 {
     public class DateFilter<T> : FilterBase<T>
     {
@@ -21,7 +21,7 @@ namespace DatasourceLoader.Filters
             Type elementType = typeof(T);
             targetField = elementType.GetProperties().Where(x => x.Name == criteria.FieldName).FirstOrDefault();
             prm = Parameter(elementType);
-            if(targetField!=null) value = getDateValue(criteria.DateValue, targetField);
+            if (targetField != null) value = getDateValue(criteria.DateValue, targetField);
 
         }
 
@@ -40,7 +40,7 @@ namespace DatasourceLoader.Filters
         public override IQueryable<T> Equal(IQueryable<T> source)
         {
             if (targetField == null || value == null) return source;
-           
+
             Expression exp = Expression.Equal(
                 Property(prm, targetField),
                 value

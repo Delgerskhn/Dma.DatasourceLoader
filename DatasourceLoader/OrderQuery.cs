@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static System.Linq.Expressions.Expression;
 
-namespace DatasourceLoader
+namespace Dma.DatasourceLoader
 {
     public class OrderQuery
     {

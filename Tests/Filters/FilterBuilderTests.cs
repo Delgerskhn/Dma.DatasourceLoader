@@ -1,5 +1,5 @@
-﻿using DatasourceLoader.Filters;
-using DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -63,7 +63,7 @@ namespace Tests.Filters
             var builder = new FilterBuilder<SampleData>(criterias, source.AsQueryable());
 
             List<FilterBase<SampleData>> res = builder.build();
-            Assert.Collection(res, 
+            Assert.Collection(res,
                 r =>
                 {
                     Assert.IsType<DateFilter<SampleData>>(r);

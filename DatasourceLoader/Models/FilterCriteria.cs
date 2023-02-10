@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatasourceLoader.Models
+namespace Dma.DatasourceLoader.Models
 {
     public class FilterCriteria
     {

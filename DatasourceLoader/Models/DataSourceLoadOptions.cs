@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DatasourceLoader.Models
+namespace Dma.DatasourceLoader.Models
 {
     public class DataSourceLoadOptions
     {
         public List<FilterCriteria> Filters { get; set; } = new();
-        public List<(string,string)> Orders { get; set; } = new();
+        public List<OrderCriteria> Orders { get; set; } = new();
     }
 }
