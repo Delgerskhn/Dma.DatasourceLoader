@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Dma.DatasourceLoader.Models
+﻿namespace Dma.DatasourceLoader.Models
 {
     public class FilterCriteria
     {
@@ -16,6 +10,7 @@ namespace Dma.DatasourceLoader.Models
         public DateTime? DateValue { get; set; }
         public string? TextValue { get; set; } = string.Empty;
         public double? NumericValue { get; set; }
+        public bool BooleanValue { get; set; }
         public string? CollectionFieldName { get; set; } = string.Empty;
     }
 }

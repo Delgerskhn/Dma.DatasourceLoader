@@ -2,6 +2,6 @@
 {
     public enum DataSourceType
     {
-        DateTime, Text, Numeric, Collection, PrimitiveCollection
+        DateTime, Text, Numeric, Collection, PrimitiveCollection, Boolean
     }
 }
