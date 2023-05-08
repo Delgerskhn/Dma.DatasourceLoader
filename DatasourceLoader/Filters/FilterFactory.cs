@@ -16,6 +16,7 @@ namespace Dma.DatasourceLoader.Filters
                 DataSourceType.Numeric => new NumericFilter<T>(criteria),
                 DataSourceType.Text => new TextFilter<T>(criteria),
                 DataSourceType.DateTime => new DateFilter<T>(criteria),
+                DataSourceType.Boolean => new BooleanFilter<T>(criteria),
                 DataSourceType.Collection => new CompositeCollectionFilter<T>(criteria),
                 DataSourceType.PrimitiveCollection => new PrimitiveCollectionFilter<T>(criteria),
                 _ => throw new NotSupportedException("Filter doesn't exists.")
