@@ -14,6 +14,7 @@ namespace Dma.DatasourceLoader.Filters
                 FilterType.GreaterThanOrEqual => filter.GreaterThanOrEqual(query),
                 FilterType.GreaterThan => filter.GreaterThan(query),
                 FilterType.Contains => filter.Contains(query),
+                FilterType.NotEquals => filter.NotEqual(query),
                 _ => query
             };
             return q;

@@ -39,6 +39,32 @@ namespace Tests.Filters
         }
 
         [Fact]
+        public void ShouldApply_notEqualFilter()
+        {
+            var date = new DateTime(2020, 12, 5);
+
+            var criteria = new FilterCriteria
+            {
+                DataType = DataSourceType.DateTime,
+                FilterType = FilterType.NotEquals,
+                DateValue = date,
+                FieldName = nameof(SampleData.DateProperty)
+            };
+            DateFilter<SampleData> filter = new(criteria);
+
+            var res = filter.ApplyFilter(source.AsQueryable());
+
+            Assert.Collection(res, (x) =>
+            {
+                Assert.Equal(new DateTime(2020, 11, 05), x.DateProperty);
+            },
+            (x) =>
+            {
+                Assert.Equal(new DateTime(2020, 10, 5), x.DateProperty);
+            });
+        }
+
+        [Fact]
         public void ShouldApply_lessThanFilter()
         {
             var date = new DateTime(2020, 11, 5);

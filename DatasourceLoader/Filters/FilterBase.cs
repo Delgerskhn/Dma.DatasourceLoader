@@ -10,6 +10,7 @@ namespace Dma.DatasourceLoader.Filters
             this.criteria = criteria;
         }
         public abstract IQueryable<T> Equal(IQueryable<T> source);
+        public abstract IQueryable<T> NotEqual(IQueryable<T> source);
         public abstract IQueryable<T> GreaterThan(IQueryable<T> source);
         public abstract IQueryable<T> GreaterThanOrEqual(IQueryable<T> source);
         public abstract IQueryable<T> LessThan(IQueryable<T> source);

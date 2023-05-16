@@ -29,5 +29,28 @@ namespace Tests.Filters
                 Assert.Equal(false, x.BooleanProperty);
             });
         }
+
+        [Fact]
+        public void ShouldApply_notEqualFilter()
+        {
+            var filter = new FilterCriteria
+            {
+                DataType = DataSourceType.Boolean,
+                FilterType = FilterType.NotEquals,
+                BooleanValue = false,
+                FieldName = nameof(SampleData.BooleanProperty)
+            };
+
+            var res = new BooleanFilter<SampleData>(filter).ApplyFilter(source.AsQueryable());
+
+            Assert.Collection(res, (x) =>
+            {
+                Assert.Equal(true, x.BooleanProperty);
+            },
+             (x) =>
+            {
+                Assert.Equal(true, x.BooleanProperty);
+            });
+        }
     }
 }

@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
@@ -24,7 +18,19 @@ namespace Dma.DatasourceLoader.Filters
             var constant = Constant(criteria.NumericValue);
             if (targetField != null) value = Convert(constant, targetField.PropertyType);
         }
+        public override IQueryable<T> NotEqual(IQueryable<T> source)
+        {
+            if (targetField == null || value == null) return source;
 
+            Expression exp = Expression.NotEqual(
+                Property(prm, targetField),
+                value
+                );
+
+            Expression<Func<T, bool>> lambda = Lambda<Func<T, bool>>(exp, prm);
+
+            return source.Where(lambda);
+        }
         public override IQueryable<T> Equal(IQueryable<T> source)
         {
             if (targetField == null || value == null) return source;
@@ -95,5 +101,7 @@ namespace Dma.DatasourceLoader.Filters
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

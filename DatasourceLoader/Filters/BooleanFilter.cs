@@ -32,6 +32,19 @@ namespace Dma.DatasourceLoader.Filters
 
             return source.Where(lambda);
         }
+        public override IQueryable<T> NotEqual(IQueryable<T> source)
+        {
+            if (targetField == null || value == null) return source;
+
+            Expression exp = Expression.NotEqual(
+                Property(prm, targetField),
+                value
+                );
+
+            Expression<Func<T, bool>> lambda = Lambda<Func<T, bool>>(exp, prm);
+
+            return source.Where(lambda);
+        }
         public override IQueryable<T> LessThan(IQueryable<T> source)
         {
             throw new NotImplementedException();
@@ -56,5 +69,7 @@ namespace Dma.DatasourceLoader.Filters
         {
             throw new NotImplementedException();
         }
+
+
     }
 }

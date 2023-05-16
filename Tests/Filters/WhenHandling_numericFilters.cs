@@ -36,6 +36,28 @@ namespace Tests.Filters
         }
 
         [Fact]
+        public void ShouldApply_notEqualFilter()
+        {
+            var filter = new FilterCriteria
+            {
+                DataType = DataSourceType.Numeric,
+                FilterType = FilterType.NotEquals,
+                NumericValue = 42,
+                FieldName = nameof(SampleData.IntProperty)
+            };
+
+            var res = new NumericFilter<SampleData>(filter).ApplyFilter(source.AsQueryable());
+
+            Assert.Collection(res, (x) =>
+            {
+                Assert.Equal(1, x.IntProperty);
+            }, (x) =>
+            {
+                Assert.Equal(25, x.IntProperty);
+            });
+        }
+
+        [Fact]
         public void ShouldApply_lessThanFilter()
         {
             var filter = new FilterCriteria

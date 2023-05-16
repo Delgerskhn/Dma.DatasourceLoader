@@ -99,5 +99,10 @@ namespace Dma.DatasourceLoader.Filters
         {
             throw new NotImplementedException();
         }
+
+        public override IQueryable<T> NotEqual(IQueryable<T> source)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

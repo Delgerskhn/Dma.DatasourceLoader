@@ -1,12 +1,6 @@
 ﻿using Dma.DatasourceLoader.Models;
-using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using static System.Linq.Expressions.Expression;
 
 namespace Dma.DatasourceLoader.Filters
@@ -97,6 +91,11 @@ namespace Dma.DatasourceLoader.Filters
         }
 
         public override IQueryable<T> LessThanOrEqual(IQueryable<T> source)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IQueryable<T> NotEqual(IQueryable<T> source)
         {
             throw new NotImplementedException();
         }
