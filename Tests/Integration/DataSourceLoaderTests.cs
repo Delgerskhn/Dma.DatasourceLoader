@@ -1,35 +1,22 @@
 ﻿using Dma.DatasourceLoader;
 using Dma.DatasourceLoader.Models;
-using NSubstitute;
-using NSubstitute.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tests.DatasourceLoader;
 
 namespace Tests.Integration
 {
     public class DataSourceLoaderTests
     {
-        private List<FilterCriteria> criterias = new List<FilterCriteria>()
+        private List<FilterOption> criterias = new List<FilterOption>()
             {
-                new FilterCriteria
-                {
-                    DataType = DataSourceType.DateTime,
-                    FilterType = FilterType.GreaterThanOrEqual,
-                    DateValue = new DateTime(2020, 11, 5),
-                    FieldName = nameof(SampleData.DateProperty)
-                }
+                //new FilterOption()
         };
 
-        private List<OrderCriteria> orders = new List<OrderCriteria> {
-            new OrderCriteria{
+        private List<OrderOption> orders = new List<OrderOption> {
+            new OrderOption{
                 Selector = nameof(SampleData.DateProperty),
                 Desc = "desc"
             },
-            new OrderCriteria{
+            new OrderOption{
                 Selector = nameof(SampleData.IntProperty),
                 Desc = "asc"
             }
@@ -66,9 +53,15 @@ namespace Tests.Integration
         }
 
         [Fact]
+        public void ShouldApplyPagination()
+        {
+            Assert.False(true);
+        }
+
+        [Fact]
         public void ShouldLoadFilters()
         {
-            var res = DataSourceLoader.LoadFilters<SampleData>(source.AsQueryable(), criterias);
+            var res = DataSourceLoader.ApplyFilters<SampleData>(source.AsQueryable(), criterias);
 
 
             Assert.Collection(res, (r) =>

@@ -7,9 +7,10 @@ namespace Tests.DatasourceLoader
         public int IntProperty { get; set; }
         public bool BooleanProperty { get; set; }
         public DateTime DateProperty { get; set; }
+        public SampleNestedData NestedData { get; set; } = new();
         public string StrProperty { get; set; } = "";
-        public ICollection<string> StrCollection { get; set; } = new string[0];
-        public ICollection<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
+        public List<string> StrCollection { get; set; } = new ();
+        public List<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
         public List<DateTime> DateCollection { get; internal set; } = new();
         public List<int> NumericCollection { get; internal set; } = new();
         public int Id { get; set; }

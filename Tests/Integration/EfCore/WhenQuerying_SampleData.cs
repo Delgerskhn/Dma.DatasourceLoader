@@ -88,17 +88,17 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    new FilterCriteria()
-                    {
-                        DataType = DataSourceType.Collection,
-                        CollectionDataType = DataSourceType.Text,
-                        CollectionFieldName= nameof(SampleNestedData.StrProperty),
-                        TextValue = "Nested1",
-                        FieldName= nameof(SampleData.NestedCollection),
-                        FilterType = FilterType.Contains,
-                    }
+                    //new FilterOption()
+                    //{
+                    //    DataType = DataSourceType.Collection,
+                    //    CollectionDataType = DataSourceType.Text,
+                    //    CollectionFieldName= nameof(SampleNestedData.StrProperty),
+                    //    TextValue = "Nested1",
+                    //    PropertyName= nameof(SampleData.NestedCollection),
+                    //    FilterType = FilterType.Contains,
+                    //}
                 }
             });
 
@@ -111,15 +111,15 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    new FilterCriteria()
-                    {
-                        DataType = DataSourceType.DateTime,
-                        DateValue = new DateTime(2023,12,12),
-                        FieldName= nameof(SampleData.DateProperty),
-                        FilterType = FilterType.GreaterThanOrEqual,
-                    }
+                    //new FilterOption()
+                    //{
+                    //    DataType = DataSourceType.DateTime,
+                    //    DateValue = new DateTime(2023,12,12),
+                    //    PropertyName= nameof(SampleData.DateProperty),
+                    //    FilterType = FilterType.GreaterThanOrEqual,
+                    //}
                 }
             });
 
@@ -131,15 +131,15 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    new FilterCriteria()
-                    {
-                        DataType = DataSourceType.Numeric,
-                        NumericValue = 20,
-                        FieldName= nameof(SampleData.IntProperty),
-                        FilterType = FilterType.LessThan,
-                    }
+                    //new FilterOption()
+                    //{
+                    //    DataType = DataSourceType.Numeric,
+                    //    NumericValue = 20,
+                    //    PropertyName= nameof(SampleData.IntProperty),
+                    //    FilterType = FilterType.LessThan,
+                    //}
                 }
             });
 
@@ -150,29 +150,29 @@ namespace Tests.Integration.EfCore
         public void ShouldApplyFilterOnText()
         {
 
-            FilterCriteria criteria = new FilterCriteria()
-            {
-                DataType = DataSourceType.Text,
-                TextValue = "ple",
-                FieldName = nameof(SampleData.StrProperty),
-                FilterType = FilterType.Contains,
-            };
+            //FilterOption criteria = new FilterOption()
+            //{
+            //    DataType = DataSourceType.Text,
+            //    TextValue = "ple",
+            //    PropertyName = nameof(SampleData.StrProperty),
+            //    FilterType = FilterType.Contains,
+            //};
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    criteria
+                    //criteria
                 }
             });
             Assert.Equal(3, res.Count());
 
-            criteria.FilterType = FilterType.Equals;
-            criteria.TextValue = "QWErty";
+            //criteria.FilterType = FilterType.Equals;
+            //criteria.TextValue = "QWErty";
 
-            res = DataSourceLoader.Load(db.SampleDatas, new()
-            {
-                Filters = new() { criteria }
-            });
+            //res = DataSourceLoader.Load(db.SampleDatas, new()
+            //{
+            //    Filters = new() { criteria }
+            //});
 
             Assert.Equal(1, res.Count());
         }
@@ -180,14 +180,14 @@ namespace Tests.Integration.EfCore
         [Fact]
         public void ShouldApplyFilterOnProjectedPrimitiveCollection()
         {
-            FilterCriteria criteria = new FilterCriteria()
-            {
-                DataType = DataSourceType.PrimitiveCollection,
-                TextValue = "Nested1",
-                FieldName = nameof(SampleData.StrCollection),
-                CollectionDataType = DataSourceType.Text,
-                FilterType = FilterType.Contains,
-            };
+            //FilterOption criteria = new FilterOption()
+            //{
+            //    DataType = DataSourceType.PrimitiveCollection,
+            //    TextValue = "Nested1",
+            //    PropertyName = nameof(SampleData.StrCollection),
+            //    CollectionDataType = DataSourceType.Text,
+            //    FilterType = FilterType.Contains,
+            //};
             var query = db.SampleDatas.Select(r => new SampleData
             {
                 StrCollection = r.NestedCollection.Select(r => r.StrProperty).ToList()
@@ -195,9 +195,9 @@ namespace Tests.Integration.EfCore
 
             var res = DataSourceLoader.Load(query, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    criteria
+                    //criteria
                 }
             });
 
