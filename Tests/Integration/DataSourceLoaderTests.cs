@@ -6,8 +6,8 @@ namespace Tests.Integration
     public class DataSourceLoaderTests
     {
         private List<FilterOption> criterias = new List<FilterOption>()
-            {
-                //new FilterOption()
+        {
+                new FilterOption(nameof(SampleData.DateProperty), "not_equals", new DateTime(2020, 10, 5)),
         };
 
         private List<OrderOption> orders = new List<OrderOption> {
@@ -53,7 +53,8 @@ namespace Tests.Integration
         [Fact]
         public void ShouldLoadFilters()
         {
-            var res = DataSourceLoader.ApplyFilters<SampleData>(source.AsQueryable(), criterias);
+            var res = DataSourceLoader.ApplyFilters
+                (source.AsQueryable(), criterias);
 
 
             Assert.Collection(res, (r) =>

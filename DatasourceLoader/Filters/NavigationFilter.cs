@@ -20,6 +20,12 @@ namespace Dma.DatasourceLoader.Filters
             Type elementType = typeof(T);
             PropertyInfo? targetField = elementType.GetProperties().Where(x => x.Name == _navigationProperty).FirstOrDefault();
             ParameterExpression prm = Parameter(elementType);
+
+
+            var notNullFilterExpression = new IsNotNullFilter<T>(propertyName).GetFilterExpression();
+            var invokeNotNullExpr = Invoke(notNullFilterExpression, prm);
+
+
             //Collection navigation to apply filter
             var collection = Property(prm, targetField!);
 
@@ -30,16 +36,19 @@ namespace Dma.DatasourceLoader.Filters
 
             LambdaExpression itemPredicate = _innerFilter.GetFilterExpression();
 
-            var body = Call(
+            var anyCall = Call(
                 typeof(Enumerable),
                 "Any",
                 new[] { itemType },
                 collection,
                 itemPredicate
-             );
+            );
 
-            Expression<Func<T, bool>> lambda = Lambda<Func<T, bool>>(body, prm);
-            return lambda;
+            var combinedExpression = AndAlso(invokeNotNullExpr, anyCall);
+
+            var lambdaExpression = Lambda<Func<T, bool>>(combinedExpression, prm);
+
+            return lambdaExpression;
         }
 
 

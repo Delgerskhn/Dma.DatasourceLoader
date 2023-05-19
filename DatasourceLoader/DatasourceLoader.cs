@@ -1,5 +1,6 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
+using Dma.DatasourceLoader.Factory;
 using Dma.DatasourceLoader.Filters;
 using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
@@ -22,10 +23,15 @@ namespace Dma.DatasourceLoader
             return query;
         }
 
-        public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters)
+        public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters) where T : class
         {
-            //var builder = new FilterBuilder<T>(filters, query);
-            //foreach (var f in builder.build()) query = f.ApplyFilter(query);
+            var filterFactory = new FilterFactory<T>();
+            foreach(var f in filters)
+            {
+                var factory = filterFactory.Create(f);
+                var filter = factory.CreateFilter(f);
+                query = query.Where(filter.GetFilterExpression());
+            }
             return query;
         }
 
