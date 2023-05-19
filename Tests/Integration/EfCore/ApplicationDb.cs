@@ -1,5 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Tests.DatasourceLoader;
+﻿using Dma.DatasourceLoader.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Tests.Integration.EfCore
 {

@@ -1,11 +1,5 @@
 ﻿using Dma.DatasourceLoader;
 using Dma.DatasourceLoader.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tests.DatasourceLoader;
 
 namespace Tests.Integration.EfCore
 {

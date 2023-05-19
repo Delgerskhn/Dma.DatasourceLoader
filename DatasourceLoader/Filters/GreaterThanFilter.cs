@@ -4,12 +4,10 @@ namespace Dma.DatasourceLoader.Filters
 {
     public class GreaterThanFilter<T> : FilterBase<T>
     {
-        private readonly string propertyName;
         private readonly object value;
 
-        public GreaterThanFilter(string propertyName, object value)
+        public GreaterThanFilter(string propertyName, object value) : base(propertyName)
         {
-            this.propertyName = propertyName;
             this.value = value;
         }
 

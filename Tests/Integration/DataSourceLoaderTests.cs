@@ -1,6 +1,5 @@
 ﻿using Dma.DatasourceLoader;
 using Dma.DatasourceLoader.Models;
-using Tests.DatasourceLoader;
 
 namespace Tests.Integration
 {
@@ -12,15 +11,8 @@ namespace Tests.Integration
         };
 
         private List<OrderOption> orders = new List<OrderOption> {
-            new OrderOption{
-                Selector = nameof(SampleData.DateProperty),
-                Desc = "desc"
-            },
-            new OrderOption{
-                Selector = nameof(SampleData.IntProperty),
-                Desc = "asc"
-            }
-
+            new OrderOption(nameof(SampleData.DateProperty),"desc"),
+            new OrderOption(nameof(SampleData.IntProperty), "asc")
             };
         private List<SampleData> source = new List<SampleData> {
             new SampleData { DateProperty = new DateTime(2020, 11, 5), IntProperty = 30 },

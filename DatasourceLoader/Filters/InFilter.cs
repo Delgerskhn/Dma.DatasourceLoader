@@ -6,12 +6,10 @@ namespace Dma.DatasourceLoader.Filters
 
     public class InFilter<T, TValue> : FilterBase<T>
     {
-        private readonly string propertyName;
         private readonly IEnumerable<TValue> values;
 
-        public InFilter(string propertyName, IEnumerable<TValue> values)
+        public InFilter(string propertyName, IEnumerable<TValue> values) : base(propertyName)
         {
-            this.propertyName = propertyName;
             this.values = values;
         }
 

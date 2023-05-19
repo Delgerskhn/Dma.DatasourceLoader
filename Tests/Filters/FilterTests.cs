@@ -1,31 +1,32 @@
 ﻿using Dma.DatasourceLoader.Filters;
-using NSubstitute;
-using System.Linq;
-using System.Linq.Expressions;
-using Tests.DatasourceLoader;
+using Dma.DatasourceLoader.Models;
 
 namespace Tests.Filters
 {
     public class FilterTests
     {
-        private static List<SampleData> source = new List<SampleData> {
-            new SampleData { StrProperty = "Text1", IntProperty = 1 },
-            new SampleData { StrProperty = "Text2" , IntProperty = 2},
-            new SampleData { 
-                StrProperty = "TextText3435Text",
-                NestedData = new(){
+        private static List<SampleData> source = new();
 
-                    StrProperty = "Text1"
-                }
-            },
-            new SampleData { NestedCollection = new List<SampleNestedData>(){ 
-                new()
-                {
-                    StrProperty = "Text1"
-                }
-            } },
+        public FilterTests() {
+            source = new List<SampleData> {
+                new SampleData { StrProperty = "Text1", IntProperty = 1 },
+                new SampleData { StrProperty = "Text2" , IntProperty = 2},
+                new SampleData {
+                    StrProperty = "TextText3435Text",
+                    NestedData = new(){
 
-        };
+                        StrProperty = "Text1"
+                    }
+                },
+                new SampleData { NestedCollection = new List<SampleNestedData>(){
+                    new()
+                    {
+                        StrProperty = "Text1"
+                    }
+                } },
+
+            };
+        }
 
         [Fact]
         public void ItShouldApplyEqualFilter()
@@ -55,6 +56,16 @@ namespace Tests.Filters
         }
 
         [Fact]
+        public void NavigationFilterShouldWorkOnNullFields()
+        {
+            source[0].NestedCollection = null!;
+            var filter = new ContainsFilter<SampleNestedData>(nameof(SampleNestedData.StrProperty), "Text1");
+            var navfilter = new NavigationFilter<SampleData, SampleNestedData>(nameof(SampleData.NestedCollection), filter);
+            var resp = source.AsQueryable().Where(navfilter.GetFilterExpression()).ToList();
+            Assert.Single(resp);
+        }
+
+        [Fact]
         public void ItShouldApplyNestedFilter()
         {
             var filter = new EqualFilter<SampleNestedData>(nameof(SampleNestedData.StrProperty), "Text1");
@@ -64,7 +75,19 @@ namespace Tests.Filters
             var resp = source.AsQueryable().Where(nestedFilter.GetFilterExpression()).ToList();
 
             Assert.Single(resp);
+        }
 
+        [Fact]
+        public void NestedFilterShouldWorkOnNullFields()
+        {
+            source[0].NestedData = null!;
+            var filter = new EqualFilter<SampleNestedData>(nameof(SampleNestedData.StrProperty), "Text1");
+            //it should generate expression like source.Where(x=>x.NestedData.StrProperty == "Text1")
+            var nestedFilter = new NestedFilter<SampleData, SampleNestedData>(nameof(SampleData.NestedData), filter);
+
+            var resp = source.AsQueryable().Where(nestedFilter.GetFilterExpression()).ToList();
+
+            Assert.Single(resp);
         }
 
         [Fact]

@@ -4,11 +4,9 @@ namespace Dma.DatasourceLoader.Filters
 {
     public class IsNullFilter<T> : FilterBase<T>
     {
-        private readonly string propertyName;
 
-        public IsNullFilter(string propertyName)
+        public IsNullFilter(string propertyName) : base(propertyName)
         {
-            this.propertyName = propertyName;
         }
 
         public override Expression<Func<T, bool>> GetFilterExpression()

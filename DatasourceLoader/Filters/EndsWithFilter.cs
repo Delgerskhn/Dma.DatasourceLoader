@@ -5,12 +5,10 @@ namespace Dma.DatasourceLoader.Filters
 {
     public class EndsWithFilter<T> : FilterBase<T>
     {
-        private readonly string propertyName;
         private readonly string value;
 
-        public EndsWithFilter(string propertyName, string value)
+        public EndsWithFilter(string propertyName, string value) : base(propertyName)
         {
-            this.propertyName = propertyName;
             this.value = value;
         }
 

@@ -9,7 +9,7 @@ namespace Dma.DatasourceLoader.Filters
         private readonly string _navigationProperty;
         private readonly FilterBase<TProperty> _innerFilter;
 
-        public NavigationFilter(string navigationProperty, FilterBase<TProperty> innerFilter)
+        public NavigationFilter(string navigationProperty, FilterBase<TProperty> innerFilter) : base(navigationProperty) 
         {
             _navigationProperty = navigationProperty;
             _innerFilter = innerFilter;
@@ -21,7 +21,7 @@ namespace Dma.DatasourceLoader.Filters
             PropertyInfo? targetField = elementType.GetProperties().Where(x => x.Name == _navigationProperty).FirstOrDefault();
             ParameterExpression prm = Parameter(elementType);
             //Collection navigation to apply filter
-            var collection = Property(prm, targetField);
+            var collection = Property(prm, targetField!);
 
             //Type of collection item
             var itemType = collection.Type.GetInterfaces()

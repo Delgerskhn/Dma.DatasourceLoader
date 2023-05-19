@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace Tests.DatasourceLoader
+﻿namespace Dma.DatasourceLoader.Models
 {
     public class SampleData
     {
@@ -9,10 +7,10 @@ namespace Tests.DatasourceLoader
         public DateTime DateProperty { get; set; }
         public SampleNestedData NestedData { get; set; } = new();
         public string StrProperty { get; set; } = "";
-        public List<string> StrCollection { get; set; } = new ();
+        public List<string> StrCollection { get; set; } = new();
         public List<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
-        public List<DateTime> DateCollection { get; internal set; } = new();
-        public List<int> NumericCollection { get; internal set; } = new();
+        public List<DateTime> DateCollection { get;  set; } = new();
+        public List<int> NumericCollection { get;  set; } = new();
         public int Id { get; set; }
     }
 
