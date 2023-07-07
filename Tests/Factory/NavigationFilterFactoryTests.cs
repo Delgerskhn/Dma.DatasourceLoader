@@ -28,7 +28,7 @@ namespace Tests.Factory
         {
             var option = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", "equals", "text");
             var filter = new NavigationFilterFactory<SampleData>().CreateFilter(option);
-
+            Assert.Equal(nameof(SampleData.NestedCollection), filter.PropertyName);
             Assert.IsType<NavigationFilter<SampleData, SampleNestedData>>(filter);
         }
     }

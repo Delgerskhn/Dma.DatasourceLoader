@@ -18,9 +18,20 @@ namespace Dma.DatasourceLoader
             return query;
         }
 
-        public static IQueryable<T> ApplyPagination<T>(IQueryable<T> query, int cursor, int size)
+        public static IQueryable<T> ApplyPagination<T>(IQueryable<T> query, int pageIndex, int size)
         {
-            return query;
+            if (pageIndex < 0)
+            {
+                throw new ArgumentException("PageIndex cannot be negative.");
+            }
+
+            if (size <= 0)
+            {
+                throw new ArgumentException("Size must be greater than zero.");
+            }
+
+            int skipCount = pageIndex * size;
+            return query.Skip(skipCount).Take(size);
         }
 
         public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters) where T : class

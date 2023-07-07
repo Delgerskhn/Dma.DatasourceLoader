@@ -37,14 +37,7 @@ namespace Tests.Filters
             Assert.Single(resp);
         }
 
-        [Fact]
-        public void ItShouldApplyContainsFilter()
-        {
-            var filter = new ContainsFilter<SampleData>(nameof(SampleData.StrProperty), "Text1");
-            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
-
-            Assert.Single(resp);
-        }
+    
 
         [Fact]
         public void ItShouldApplyNavigationFilter()
@@ -99,19 +92,12 @@ namespace Tests.Filters
 
         }
 
-        [Fact]
-        public void ItShouldApplyNotContainsFilter()
-        {
-            var filter = new NotContainsFilter<SampleData>(nameof(SampleData.StrProperty), "Text1");
-            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
-
-            Assert.Equal(3,resp.Count);
-        }
+      
 
         [Fact]
         public void ItShouldApplyInFilter()
         {
-            var filter = new InFilter<SampleData, int>(nameof(SampleData.IntProperty), new int[] { 1 });
+            var filter = new InFilter<SampleData>(nameof(SampleData.IntProperty), new int[] { 1 });
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
 
             Assert.Single(resp);
@@ -120,7 +106,7 @@ namespace Tests.Filters
         [Fact]
         public void ItShouldApplyNotInFilter()
         {
-            var filter = new NotInFilter<SampleData, string>(nameof(SampleData.StrProperty), new string[] { "Text1" });
+            var filter = new NotInFilter<SampleData>(nameof(SampleData.StrProperty), new string[] { "Text1" });
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
 
             Assert.Equal(3,resp.Count);

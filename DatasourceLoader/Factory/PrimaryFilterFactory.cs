@@ -19,6 +19,8 @@ namespace Dma.DatasourceLoader.Factory
             if (option.Operator == FilterOperators.Lte) return new LessThanOrEqualFilter<T>(option.PropertyName, option.Value);
             if (option.Operator == FilterOperators.Null) return new IsNullFilter<T>(option.PropertyName);
             if (option.Operator == FilterOperators.NotNull) return new IsNotNullFilter<T>(option.PropertyName);
+            if (option.Operator == FilterOperators.In) return new InFilter<T>(option.PropertyName, option.Value);
+            if (option.Operator == FilterOperators.NotIn) return new NotInFilter<T>(option.PropertyName, option.Value);
 
             throw new InvalidOperationException("Operator not supported");
         }

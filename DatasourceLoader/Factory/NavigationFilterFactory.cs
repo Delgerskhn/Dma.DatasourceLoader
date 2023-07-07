@@ -8,11 +8,11 @@ namespace Dma.DatasourceLoader.Factory
         public override FilterBase<T> CreateFilter(FilterOption option)
         {
             string[] properties = option.PropertyName.Split('.');
-            string property = properties[0];
+            string navigationProperty = properties[0];
             string innerProperty = properties[1];
 
             Type type = typeof(T);
-            var propertyInfo = type.GetProperty(property);
+            var propertyInfo = type.GetProperty(navigationProperty);
             Type propertyType = propertyInfo!.PropertyType;
 
             var innerOption = new FilterOption(innerProperty, option.Operator, option.Value);
@@ -28,7 +28,7 @@ namespace Dma.DatasourceLoader.Factory
             var innerFilterInstance = createFilterMethod!.Invoke(abstractFactory, new object[] { innerOption });
 
             Type navigationFilterType = typeof(NavigationFilter<,>).MakeGenericType(typeof(T), listElementType);
-            var filter = (FilterBase<T>)Activator.CreateInstance(navigationFilterType, innerProperty, innerFilterInstance)!;
+            var filter = (FilterBase<T>)Activator.CreateInstance(navigationFilterType, navigationProperty, innerFilterInstance)!;
 
             return filter;
         }
