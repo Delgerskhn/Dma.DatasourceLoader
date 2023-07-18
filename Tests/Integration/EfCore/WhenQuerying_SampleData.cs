@@ -84,15 +84,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    //new FilterOption()
-                    //{
-                    //    DataType = DataSourceType.Collection,
-                    //    CollectionDataType = DataSourceType.Text,
-                    //    CollectionFieldName= nameof(SampleNestedData.StrProperty),
-                    //    TextValue = "Nested1",
-                    //    PropertyName= nameof(SampleData.NestedCollection),
-                    //    FilterType = FilterType.Contains,
-                    //}
+                    new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", "contains", "Nested1")
                 }
             });
 
@@ -107,13 +99,8 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    //new FilterOption()
-                    //{
-                    //    DataType = DataSourceType.DateTime,
-                    //    DateValue = new DateTime(2023,12,12),
-                    //    PropertyName= nameof(SampleData.DateProperty),
-                    //    FilterType = FilterType.GreaterThanOrEqual,
-                    //}
+                    new FilterOption($"{nameof(SampleData.DateProperty)}", "gte", new DateTime(2023,12,12))
+
                 }
             });
 
@@ -127,13 +114,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    //new FilterOption()
-                    //{
-                    //    DataType = DataSourceType.Numeric,
-                    //    NumericValue = 20,
-                    //    PropertyName= nameof(SampleData.IntProperty),
-                    //    FilterType = FilterType.LessThan,
-                    //}
+                    new FilterOption($"{nameof(SampleData.IntProperty)}", "lt", 20)
                 }
             });
 
@@ -144,54 +125,39 @@ namespace Tests.Integration.EfCore
         public void ShouldApplyFilterOnText()
         {
 
-            //FilterOption criteria = new FilterOption()
-            //{
-            //    DataType = DataSourceType.Text,
-            //    TextValue = "ple",
-            //    PropertyName = nameof(SampleData.StrProperty),
-            //    FilterType = FilterType.Contains,
-            //};
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
                 Filters = new List<FilterOption>
-                {
-                    //criteria
+                { 
+                    new FilterOption($"{nameof(SampleData.StrProperty)}", "contains", "ple")
                 }
             });
             Assert.Equal(3, res.Count());
 
-            //criteria.FilterType = FilterType.Equals;
-            //criteria.TextValue = "QWErty";
+            res = DataSourceLoader.Load(db.SampleDatas, new()
+            {
+                Filters = new() { 
+                    new FilterOption($"{nameof(SampleData.StrProperty)}", "equals", "QWErty")
 
-            //res = DataSourceLoader.Load(db.SampleDatas, new()
-            //{
-            //    Filters = new() { criteria }
-            //});
+                }
+            });
 
             Assert.Equal(1, res.Count());
         }
 
         [Fact]
-        public void ShouldApplyFilterOnProjectedPrimitiveCollection()
+        public void ShouldApplyFilterOnProjectedCollection()
         {
-            //FilterOption criteria = new FilterOption()
-            //{
-            //    DataType = DataSourceType.PrimitiveCollection,
-            //    TextValue = "Nested1",
-            //    PropertyName = nameof(SampleData.StrCollection),
-            //    CollectionDataType = DataSourceType.Text,
-            //    FilterType = FilterType.Contains,
-            //};
-            var query = db.SampleDatas.Select(r => new SampleData
+            var query = db.SampleDatas.Select(r => new 
             {
-                StrCollection = r.NestedCollection.Select(r => r.StrProperty).ToList()
+                r.NestedCollection
             });
 
             var res = DataSourceLoader.Load(query, new()
             {
                 Filters = new List<FilterOption>
-                {
-                    //criteria
+                { 
+                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", "contains", "Nested1") 
                 }
             });
 
