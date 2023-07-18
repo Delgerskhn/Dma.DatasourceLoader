@@ -84,7 +84,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", "contains", "Nested1")
+                    new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
                 }
             });
 
@@ -99,7 +99,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    new FilterOption($"{nameof(SampleData.DateProperty)}", "gte", new DateTime(2023,12,12))
+                    new FilterOption($"{nameof(SampleData.DateProperty)}", FilterOperators.Gte, new DateTime(2023,12,12))
 
                 }
             });
@@ -114,7 +114,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 {
-                    new FilterOption($"{nameof(SampleData.IntProperty)}", "lt", 20)
+                    new FilterOption($"{nameof(SampleData.IntProperty)}", FilterOperators.Lt, 20)
                 }
             });
 
@@ -129,7 +129,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 { 
-                    new FilterOption($"{nameof(SampleData.StrProperty)}", "contains", "ple")
+                    new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Contains, "ple")
                 }
             });
             Assert.Equal(3, res.Count());
@@ -137,7 +137,7 @@ namespace Tests.Integration.EfCore
             res = DataSourceLoader.Load(db.SampleDatas, new()
             {
                 Filters = new() { 
-                    new FilterOption($"{nameof(SampleData.StrProperty)}", "equals", "QWErty")
+                    new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Eq, "QWErty")
 
                 }
             });
@@ -157,7 +157,7 @@ namespace Tests.Integration.EfCore
             {
                 Filters = new List<FilterOption>
                 { 
-                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", "contains", "Nested1") 
+                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1") 
                 }
             });
 
