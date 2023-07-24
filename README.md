@@ -1,12 +1,12 @@
 # DatasourceLoader
 
-This is a little package is written for loading filter and order queries 
+This is a little package written for loading filter and order queries 
 from a IQueryable data source. The table filtering and sorting actions 
 are really common use case for many applications. Thus, I created this package to handle filters and sorters out 
 of the box. Made all my dashboard table actions easier and faster.
 
 ## Installation
-<a href="https://www.nuget.org/packages/Dma.DatasourceLoader">Nuget package</a>
+[Nuget package](https://www.nuget.org/packages/Dma.DatasourceLoader)
 ```bash
 dotnet add package Dma.DatasourceLoader
 ```
@@ -36,52 +36,25 @@ namespace MyProject.Controllers {
 ```
 
 
-## Implemented filter criterias
-<ul>
-    <li>On text fields
-        <ul>
-            <li>Contains</li>
-            <li>Equal</li>
-        </ul>
-    </li>
-    <li>On numeric fields
-        <ul>
-            <li>Equal</li>
-            <li>LessThan</li>
-            <li>LessThanOrEqual</li>
-            <li>GreaterThan</li>
-            <li>GreaterThanOrEqual</li>
-        </ul>
-    </li>
-    <li>On date fields
-        <ul>
-            <li>Equal</li>
-            <li>LessThan</li>
-            <li>LessThanOrEqual</li>
-            <li>GreaterThan</li>
-            <li>GreaterThanOrEqual</li>
-        </ul>
-    </li>
-    <li>On IEnumerable<span><</span>T<span>></span> fields 
-        <ul>
-            <li>String field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-            <li>Numeric field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-            <li>DateTime field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-</ul>
+## Implemented filters
+- Navigation filter (1 to many relation)
+- Nested filter (1 to 1 relation)
+- Primary filters
+    - Contains
+    - EndsWith
+    - Equals
+    - Greater than
+    - Greater than or equal
+    - In
+    - Not null
+    - Null
+    - Less than
+    - Less than or equal
+    - Not contains
+    - Not equal
+    - Not in
+    - Starts with
+
 
 ## Usage
 The DataSourceLoadOptions class has properties called Filters and Orders. 
@@ -98,28 +71,21 @@ then by the field "IntProperty" in ascending order.
 
 var options = new DataSourceLoadOptions
 {
-    Filters = new List<FilterCriteria>
+    Filters = new List<FilterOption>()
     {
-        //Example LessThan numeric filter on IntProperty of type YourEntity. 
-        new FilterCriteria()
-        {
-            DataType = DataSourceType.Numeric,
-            NumericValue = 20,
-            FieldName= nameof(YourEntity.IntProperty),
-            FilterType = FilterType.LessThan,
-        }
+            new FilterOption(nameof(SampleData.DateProperty), "not_equals", new DateTime(2020, 10, 5)),
     },
-    Orders = new List<(string, string)> {
-        ( nameof(YourEntity.DateProperty), "desc" ),
-        ( nameof(YourEntity.IntProperty), "asc" ),
+    Orders = new List<OrderOption> {
+            new OrderOption(nameof(SampleData.DateProperty),"desc"),
+            new OrderOption(nameof(SampleData.IntProperty), "asc")
     }
 };
 var query = DatasourceLoader.Load<YourEntity>(yourDataSource, options);
 
 ```
 
-### How to define a FilterCriteria
-The FilterCriteria object contains information about which field you want 
+### How to define a FilterOption
+The FilterOption object contains information about which field you want 
 to filter, the type of target field and which kind of criteria you want to apply.
 
 ```csharp
