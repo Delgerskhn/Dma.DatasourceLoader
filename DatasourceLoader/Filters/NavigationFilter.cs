@@ -4,12 +4,12 @@ using static System.Linq.Expressions.Expression;
 
 namespace Dma.DatasourceLoader.Filters
 {
-    public class NavigationFilter<T, TProperty> : FilterBase<T>
+    public class NavigationFilter<T> : FilterBase<T>
     {
         private readonly string _navigationProperty;
-        private readonly FilterBase<TProperty> _innerFilter;
+        private readonly FilterBaseBase _innerFilter;
 
-        public NavigationFilter(string navigationProperty, FilterBase<TProperty> innerFilter) : base(navigationProperty) 
+        public NavigationFilter(string navigationProperty, FilterBaseBase innerFilter) : base(navigationProperty) 
         {
             _navigationProperty = navigationProperty;
             _innerFilter = innerFilter;

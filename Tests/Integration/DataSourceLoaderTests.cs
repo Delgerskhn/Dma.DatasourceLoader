@@ -23,8 +23,12 @@ namespace Tests.Integration
         [Fact]
         public void ShouldApplyNavigationFilter()
         {
-            var filter1 = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", "contains", "text");
-            var filter2 = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.IntProperty)}", "in", new int[] { 1, 3 });
+            var filter1 = new FilterOption(
+                $"{nameof(SampleData.NestedCollection)}." +
+                $"{nameof(SampleNestedData.StrProperty)}", "contains", "text");
+            var filter2 = new FilterOption(
+                $"{nameof(SampleData.NestedCollection)}." +
+                $"{nameof(SampleNestedData.IntProperty)}", "in", new int[] { 1, 3 });
             List<FilterOption> filter = new List<FilterOption> { filter1,
                 filter2
             };

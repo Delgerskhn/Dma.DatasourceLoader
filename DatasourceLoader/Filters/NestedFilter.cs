@@ -2,11 +2,11 @@
 
 namespace Dma.DatasourceLoader.Filters
 {
-    public class NestedFilter<T, TProperty> : FilterBase<T>
+    public class NestedFilter<T> : FilterBase<T>
     {
-        private readonly FilterBase<TProperty> _innerFilter;
+        private readonly FilterBaseBase _innerFilter;
 
-        public NestedFilter(string nestedProperty, FilterBase<TProperty> innerFilter) : base(nestedProperty) { 
+        public NestedFilter(string nestedProperty, FilterBaseBase innerFilter) : base(nestedProperty) { 
             _innerFilter = innerFilter;
         }
         public override Expression<Func<T, bool>> GetFilterExpression()

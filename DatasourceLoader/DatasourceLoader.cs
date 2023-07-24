@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
-using Dma.DatasourceLoader.Factory;
-using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Analyzer;
+using Dma.DatasourceLoader.Creator;
 using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
@@ -36,12 +36,12 @@ namespace Dma.DatasourceLoader
 
         public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters) where T : class
         {
-            var filterFactory = new FilterFactory<T>();
             foreach(var f in filters)
             {
-                var factory = filterFactory.Create(f);
-                var filter = factory.CreateFilter(f);
-                query = query.Where(filter.GetFilterExpression());
+                var analyzer = new FilterAnalyzer<T>(f);
+                var filter = new FilterCreator(analyzer).Create();
+
+                query = query.Where((Expression<Func<T,bool>>)filter.GetFilterExpression());
             }
             return query;
         }

@@ -1,11 +1,18 @@
 ﻿using Dma.DatasourceLoader.Filters;
 using Dma.DatasourceLoader.Models;
 
-namespace Dma.DatasourceLoader.Factory
+namespace Dma.DatasourceLoader.Creator
 {
-    public class PrimaryFilterFactory<T> : AbstractFilterFactory<T> where T : class
+    public class PrimaryFilterCreator<T> : IFilterCreator where T : class
     {
-        public override FilterBase<T> CreateFilter(FilterOption option)
+        private readonly FilterOption option;
+
+        public PrimaryFilterCreator(FilterOption option)
+        {
+            this.option = option;
+        }
+
+        public FilterBaseBase CreateFilter()
         {
             if (option.Operator == FilterOperators.Eq) return new EqualFilter<T>(option.PropertyName, option.Value);
             if (option.Operator == FilterOperators.NotEq) return new NotEqualFilter<T>(option.PropertyName, option.Value);

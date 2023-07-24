@@ -68,7 +68,12 @@ namespace Tests.Integration.EfCore
                 DateProperty = new DateTime(2024, 12, 12),
                 DateCollection = new List<DateTime> { new DateTime(2024, 12, 13) },
                 NestedCollection = new List<SampleNestedData> {
-                    new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,14),StrProperty = "Nested5"},
+                    new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,14),StrProperty = "Nested5",
+                    DeepNestedData = new()
+                    {
+                        StrProperty = "DeepNestedText"
+                    }
+                    },
                     new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,15),StrProperty = "Nested2"},
                 },
                 NumericCollection = new List<int> { 1, 2, 3, },
@@ -143,6 +148,21 @@ namespace Tests.Integration.EfCore
             });
 
             Assert.Equal(1, res.Count());
+        }
+
+        [Fact]
+        public void ShouldApplyFilterOnDeepNestedObject()
+        {
+            //SampleData.NestedCollection.NestedObject.StrProperty Equals SampleText
+            var filter = new FilterOption($"NestedCollection.DeepNestedData.StrProperty", FilterOperators.Contains, "DeepNestedText");
+            var res = DataSourceLoader.Load(db.SampleDatas, new()
+            {
+                Filters = new List<FilterOption>
+                {
+                    filter
+                }
+            });
+            Assert.Single(res);
         }
 
         [Fact]
