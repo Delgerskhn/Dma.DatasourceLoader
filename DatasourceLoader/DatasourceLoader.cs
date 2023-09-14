@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Analyzer;
+using Dma.DatasourceLoader.Creator;
 using Dma.DatasourceLoader.Models;
 using static System.Linq.Expressions.Expression;
 
@@ -16,19 +11,42 @@ namespace Dma.DatasourceLoader
     {
         public static IQueryable<T> Load<T>(IQueryable<T> query, DataSourceLoadOptions options) where T : class
         {
-            query = LoadFilters(query, options.Filters);
+            query = ApplyFilters(query, options.Filters);
             query = ApplyOrders(query, options.Orders);
+            query = ApplyPagination(query, options.Cursor, options.Size);
+
             return query;
         }
 
-        public static IQueryable<T> LoadFilters<T>(IQueryable<T> query, List<FilterCriteria> filters)
+        public static IQueryable<T> ApplyPagination<T>(IQueryable<T> query, int pageIndex, int size)
         {
-            var builder = new FilterBuilder<T>(filters, query);
-            foreach (var f in builder.build()) query = f.ApplyFilter(query);
+            if (pageIndex < 0)
+            {
+                throw new ArgumentException("PageIndex cannot be negative.");
+            }
+
+            if (size <= 0)
+            {
+                throw new ArgumentException("Size must be greater than zero.");
+            }
+
+            int skipCount = pageIndex * size;
+            return query.Skip(skipCount).Take(size);
+        }
+
+        public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters) where T : class
+        {
+            foreach(var f in filters)
+            {
+                var analyzer = new FilterAnalyzer<T>(f);
+                var filter = new FilterCreator(analyzer).Create();
+
+                query = query.Where((Expression<Func<T,bool>>)filter.GetFilterExpression());
+            }
             return query;
         }
 
-        public static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, List<OrderCriteria> sorters) where T : class
+        public static IQueryable<T> ApplyOrders<T>(IQueryable<T> query, List<OrderOption> sorters) where T : class
         {
             Type elementType = typeof(T);
             query.OrderBy(x => elementType.Name);
@@ -48,14 +66,14 @@ namespace Dma.DatasourceLoader
                 {
                     ParameterExpression prm = Parameter(elementType);
                     var propertyToOrderByExpression = Property(prm, targetField);
-                    Expression conversion = Expression.Convert(propertyToOrderByExpression, typeof(object));
+                    Expression conversion = Convert(propertyToOrderByExpression, typeof(object));
 
                     var runMe = Call(
                         typeof(Queryable),
                         method,
-                        new Type[] { query.ElementType, typeof(Object) },
+                        new Type[] { query.ElementType, typeof(object) },
                         query.Expression,
-                        Lambda<Func<T, Object>>(conversion, new ParameterExpression[] { prm }));
+                        Lambda<Func<T, object>>(conversion, new ParameterExpression[] { prm }));
                     query = query.Provider.CreateQuery<T>(runMe);
                 }
 

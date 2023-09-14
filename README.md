@@ -1,17 +1,20 @@
 # DatasourceLoader
 
-This is a little package is written for loading filter and order queries 
-from a IQueryable data source. The table filtering and sorting actions 
-are really common use case for many applications. Thus, I created this package to handle filters and sorters out 
-of the box. Made all my dashboard table actions easier and faster.
+The DatasourceLoader is a small package designed to simplify the loading of filter and order queries from an IQueryable data source. Filtering and sorting tables are common tasks in many applications, and this package streamlines these operations, making dashboard table actions easier and faster.
 
 ## Installation
-<a href="https://www.nuget.org/packages/Dma.DatasourceLoader">Nuget package</a>
+
+You can install the package via NuGet:
+
+[Nuget package](https://www.nuget.org/packages/Dma.DatasourceLoader)
+
 ```bash
 dotnet add package Dma.DatasourceLoader
 ```
 
 ## Quickstart
+
+Here's an example of how to use the DatasourceLoader in your C# code:
 
 ```csharp
 using Dma.DatasourceLoader;
@@ -25,7 +28,7 @@ namespace MyProject.Controllers {
         public MyController(MyDbContext context) {
             _context = context;
         }
-       
+
         [HttpPost]
         public async Task<IActionResult> Index([FromBody] DataSourceLoadOptions options) {
             var result = DataSourceLoader.Load(_context.SampleDatas, options);
@@ -35,201 +38,214 @@ namespace MyProject.Controllers {
 }
 ```
 
+## Implemented filters
 
-## Implemented filter criterias
-<ul>
-    <li>On text fields
-        <ul>
-            <li>Contains</li>
-            <li>Equal</li>
-        </ul>
-    </li>
-    <li>On numeric fields
-        <ul>
-            <li>Equal</li>
-            <li>LessThan</li>
-            <li>LessThanOrEqual</li>
-            <li>GreaterThan</li>
-            <li>GreaterThanOrEqual</li>
-        </ul>
-    </li>
-    <li>On date fields
-        <ul>
-            <li>Equal</li>
-            <li>LessThan</li>
-            <li>LessThanOrEqual</li>
-            <li>GreaterThan</li>
-            <li>GreaterThanOrEqual</li>
-        </ul>
-    </li>
-    <li>On IEnumerable<span><</span>T<span>></span> fields 
-        <ul>
-            <li>String field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-            <li>Numeric field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-            <li>DateTime field of T
-                <ul>
-                    <li>Equal</li>
-                </ul>
-            </li>
-        </ul>
-    </li>
-</ul>
+The DatasourceLoader supports various filters, including:
 
-## Usage
-The DataSourceLoadOptions class has properties called Filters and Orders. 
-The FilterCriteria object reflects the object you want to apply filter on.
+- Navigation filter (for one-to-many relationships)
+- Nested filter (for one-to-one relationships)
+- Primary filters
+  - Contains
+  - EndsWith
+  - Equals
+  - Greater than
+  - Greater than or equal
+  - In
+  - Not null
+  - Null
+  - Less than
+  - Less than or equal
+  - Not contains
+  - Not equal
+  - Not in
+  - Starts with
 
-As for orders, you can specify the name of a field you want to order with the sorting criteria <b>"asc"</b> or <b>"desc"</b>. 
+# Usage
 
-<b>Remember</b>, the orders are applied according to the order of index they are specified.
-From example below, you can see that the query will be ordered by the field "DateProperty" in descending order, 
-then by the field "IntProperty" in ascending order.
+The DataSourceLoadOptions class includes properties such as Filters, Orders, Cursor, and Size. The FilterOption record provides information about the object and property on which you want to apply a filter.
 
+For ordering, specify the field name along with sorting criteria, either "asc" or "desc".
+
+Pagination can be easily applied by using the Cursor and Size attributes.
+
+Keep in mind that the order of the specified orders determines the order of application. In the example below, the query will first order by the "DateProperty" field in descending order and then by the "IntProperty" field in ascending order:
 
 ```csharp
 
 var options = new DataSourceLoadOptions
 {
-    Filters = new List<FilterCriteria>
+    Filters = new List<FilterOption>()
     {
-        //Example LessThan numeric filter on IntProperty of type YourEntity. 
-        new FilterCriteria()
-        {
-            DataType = DataSourceType.Numeric,
-            NumericValue = 20,
-            FieldName= nameof(YourEntity.IntProperty),
-            FilterType = FilterType.LessThan,
-        }
+            new FilterOption(nameof(SampleData.DateProperty), "not_equals", new DateTime(2020, 10, 5)),
     },
-    Orders = new List<(string, string)> {
-        ( nameof(YourEntity.DateProperty), "desc" ),
-        ( nameof(YourEntity.IntProperty), "asc" ),
+    Orders = new List<OrderOption> {
+            new OrderOption(nameof(SampleData.DateProperty),"desc"),
+            new OrderOption(nameof(SampleData.IntProperty), "asc")
     }
 };
 var query = DatasourceLoader.Load<YourEntity>(yourDataSource, options);
 
 ```
 
-### How to define a FilterCriteria
-The FilterCriteria object contains information about which field you want 
-to filter, the type of target field and which kind of criteria you want to apply.
+### Defining a FilterOption
+
+The FilterOption object contains information about property name, filter operation and the value to filter against.
 
 ```csharp
-public class FilterCriteria
-{
-    public string FieldName { get; set; } = string.Empty;
-    public DataSourceType DataType { get; set; }
-    public DataSourceType? CollectionDataType { get; set; }
-    public FilterType FilterType { get; set; }
-    public DateTime? DateValue { get; set; }
-    public string? TextValue { get; set; } = string.Empty;
-    public double? NumericValue { get; set; }
-    public string? CollectionFieldName { get; set; } = string.Empty;
-}
+public record FilterOption(string PropertyName, string Operator, object Value){}
 ```
 
-#### When filtering field of primitive type
-You will need the FieldName, DataType, FilterType and one of the Value fields
-based on the value of DataType. You need to assign TextValue, NumericValue or DateValue respectively 
-for DataSourceType.Text, DataSourceType.Numeric and DataSourceType.DateTime.
+For example, consider the following data model:
 
 ```csharp
-//for numbers
-new FilterCriteria()
-{
-    DataType = DataSourceType.Numeric,
-    NumericValue = 20,
-    FieldName= nameof(YourEntity.IntProperty),
-    FilterType = FilterType.LessThan,
-}
-
-//for text
-new FilterCriteria()
-{
-    DataType = DataSourceType.Text,
-    TextValue = "some text",
-    FieldName= nameof(YourEntity.StrProperty),
-    FilterType = FilterType.Contains,
-}
-
-
-//for date
-new FilterCriteria()
-{
-    DataType = DataSourceType.DateTime,
-    DateValue = DateTime.Now(),
-    FieldName= nameof(YourEntity.DateProperty),
-    FilterType = FilterType.LessThan,
-}
+ public class SampleData
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public int IntProperty { get; set; }
+        public bool BooleanProperty { get; set; }
+        public DateTime DateProperty { get; set; }
+        public SampleNestedData? NestedData { get; set; } = new();
+        public string StrProperty { get; set; } = "";
+        public List<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
+    }
+    public class DeepNestedData
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public string StrProperty { get; set; } = default!;
+        public int? OwnerId { get; set; }
+        public SampleNestedData? Owner;
+    }
+    public class SampleNestedData
+    {
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
+        public int IntProperty { get; set; }
+        public DateTime DateProperty { get; set; }
+        public string StrProperty { get; set; } = "";
+        public DeepNestedData? DeepNestedData { get; set; } = default!;
+        public int? OwnerId { get; set; }
+        public int? ParentId { get; set; }
+        public SampleData? Owner { get; set; } = default!;
+        public SampleData? Parent { get; set; } = default!;
+    }
 ```
 
-#### When filtering collection fields
-There are two different collection filters. The 
-PrimitiveCollectionFilter is used for filtering collections like 
-List<a><</a>int<a>></a> whereas CompositeCollectionFilter is designed
-to filter Custom types. 
+The FilterOption record doesn't take information about the target Entity class, because the package infers the Entity class in runtime. You only need to be aware of possible attributes and properties of the entity class so that your filters won't mismatch with the actual class property names.
+
+Let's say you have registered only SampleData class inside your EF DbContext like below.
 
 ```csharp
-//For composite collection of SampleNestedData
-var criteria = new FilterCriteria
-{
-    DataType = DataSourceType.Collection,
-    CollectionDataType = DataSourceType.Text,
-    FilterType = FilterType.Contains,
-    TextValue = "eRty",
-    FieldName = nameof(SampleData.NestedCollection),
-    CollectionFieldName = nameof(SampleNestedData.StrProperty)
-};
+ public class ApplicationDb : DbContext
+    {
+        //...omitted for simplicity
 
-//For primitive collection StrCollection of SampleData
-FilterCriteria criteria = new FilterCriteria()
-{
-    DataType = DataSourceType.PrimitiveCollection,
-    TextValue = "Nested1",
-    FieldName = nameof(SampleData.StrCollection),
-    CollectionDataType = DataSourceType.Text,
-    FilterType = FilterType.Contains,
-};
+        public virtual DbSet<SampleData> SampleDatas { get; set; } = default!;
+
+        //...omitted for simplicity
+    }
 ```
 
-### The filtering capability
-A filter criteria can either filter one of the primitive type field or a collection
-type field of the target class.
+Knowing the structure of SampleData class and its properties you can now apply filters on corresponding properties.
 
+```csharp
+    /*SampleData class has a navigation called NestedCollection of type SampleNestedData
+    SampleNestedData class has a property StrProperty of type string
+    Thus, the filter below will search for SampleData whose NestedCollection navigation has a StrProperty that contains the text 'Awesome!'
+    */
+    var containsFilter = new FilterOption(
+        "NestedCollection.StrProperty",
+        FilterOperators.Contains,
+        "Awesome!"
+    );
+
+    var res = DataSourceLoader.Load(db.SampleDatas, new()
+        {
+            Filters = new List<FilterOption>
+            {
+                containsFilter
+            }
+        });
+```
+
+#### When applying filters on non-relational properties
+
+Its just simple as you need to provide the property name, filter type, and the value to search for.
+
+```csharp
+//Returns data whose StrProperty contains text "You can't guess"
+var containsFilter = new FilterOption(
+    "StrProperty",
+    FilterOperators.Contains,
+    "You can't guess");
+//Returns data whose IntProperty is either 1 or 3
+var inFilter = new FilterOption(
+    "IntProperty",
+    FilterOperators.In,
+    new int[] { 1, 3 }
+);
+//Returns data whose DateProperty is greater than or equals 2023-12-12
+var dateFilter = new FilterOption(
+    "DateProperty",
+    FilterOperators.Gte,
+    new DateTime(2023,12,12)
+);
+
+```
+
+#### When filtering navigation properties
+
+Filtering on relational properties is a little bit trickier. The relationship could be either one-to-many or one-to-one. We treat them same when declaring FilterOptions.
+
+```csharp
+/*
+NestedCollection is of type List<SampleNestedData>
+SampleNestedData class has property DeepNestedData of type DeepNestedData?
+DeepNestedData class has property Id of type int
+*/
+var navigationFilter = new FilterOption(
+    "NestedCollection.DeepNestedData.Id",
+    FilterOperators.In,
+    new int[] {1, 3}
+);
+
+/*
+SampleData class has property NestedData of type SampleNestedData?
+SampleNestedData class has property DeepNestedData of type DeepNestedData?
+DeepNestedData class has property StrProperty of type string
+*/
+var nestedFilter = new FilterOption(
+    "NestedData.DeepNestedData.StrProperty",
+    FilterOperators.Contains,
+    "I am deep nested"
+);
+```
+
+As you can see, you can use the dot **"."** character marking if the property is a composite type. When nesting the filters like this, the ending property must be always of primitive type (int, float, string, datetime...) like ".StrProperty", ".IntProperty", ".DateProperty".
+
+The PropertyName attribute could be nested many levels according to your source class properties. "AncestorClass.ChildProperty.GreatChildProperty.PrimitiveProperty..."
 
 ### Entity framework support
-You can load the data source from entity framework with this package. 
-However the primitive type of collection is not supported by EF, the 
-proper projection could be used for PrimitiveCollectionFilter. 
+
+You can load the data source from entity framework with this package.
+Since this package is written on top of LINQ, you can do projections using select statement using EF and apply filters on them or vice versa.
 
 ```csharp
- FilterCriteria criteria = new FilterCriteria()
-    {
-        DataType = DataSourceType.PrimitiveCollection,
-        TextValue = "Nested1",
-        FieldName = nameof(SampleData.StrCollection),
-        CollectionDataType = DataSourceType.Text,
-        FilterType = FilterType.Contains,
-    };
+ FilterOption filter = new FilterOption("IntProperty", "not_in", int[] {22, 23});
 
- var query = db.SampleDatas.Select(r => new SampleData
-            {
-                StrCollection = r.NestedCollection.Select(r => r.StrProperty).ToList()
-            });
 
+ var query = db.SampleDatas.SelectMany(r => r.NestedCollection);
+
+//The result type would be IQueryable<SampleNestedData>
  var res = DataSourceLoader.Load(query, new()
             {
-                Filters = new List<FilterCriteria>
+                Filters = new List<FilterOption>
                 {
-                    criteria
+                    filter
                 }
             });
 

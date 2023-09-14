@@ -1,20 +1,17 @@
-﻿using Dma.DatasourceLoader.Models;
+﻿using System.Linq.Expressions;
 
 namespace Dma.DatasourceLoader.Filters
 {
-    public abstract class FilterBase<T>
+    public abstract class FilterBase<T> : FilterBaseBase
     {
-        public readonly FilterCriteria criteria;
-        public FilterBase(FilterCriteria criteria)
+        protected readonly string propertyName;
+        public string PropertyName { get { return propertyName; } }
+
+        public FilterBase(string propertyName)
         {
-            this.criteria = criteria;
+            this.propertyName = propertyName;
         }
-        public abstract IQueryable<T> Equal(IQueryable<T> source);
-        public abstract IQueryable<T> NotEqual(IQueryable<T> source);
-        public abstract IQueryable<T> GreaterThan(IQueryable<T> source);
-        public abstract IQueryable<T> GreaterThanOrEqual(IQueryable<T> source);
-        public abstract IQueryable<T> LessThan(IQueryable<T> source);
-        public abstract IQueryable<T> LessThanOrEqual(IQueryable<T> source);
-        public abstract IQueryable<T> Contains(IQueryable<T> source);
+        override
+        public abstract Expression<Func<T, bool>> GetFilterExpression();
     }
 }

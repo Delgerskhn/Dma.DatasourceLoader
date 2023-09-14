@@ -1,0 +1,30 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <PackageId>Dma.$(AssemblyName)</PackageId>
+    <Title>Data source loader for IQueryable. Filters and sorters.</Title>
+    <Authors>Delgerskhn</Authors>
+    <Description>A generic filter, sorter query builder based on runtime state for IQueryable class.</Description>
+    <PackageProjectUrl>https://github.com/delgerskhn/datasourceloader</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryUrl>https://github.com/delgerskhn/datasourceloader</RepositoryUrl>
+    <PackageTags>IQueryable, Filters, Orders, Data source</PackageTags>
+    <PackageReleaseNotes>Supports more filters, able to handle deep nested filters recursively.</PackageReleaseNotes>
+    <Version>2.0.0</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Factory\" />
+  </ItemGroup>
+
+</Project>

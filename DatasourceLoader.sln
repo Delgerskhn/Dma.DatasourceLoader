@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DatasourceLoader", "DatasourceLoader\DatasourceLoader.csproj", "{507C151B-94B7-4666-824D-770F8DB58909}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dma.DatasourceLoader", "DatasourceLoader\Dma.DatasourceLoader.csproj", "{507C151B-94B7-4666-824D-770F8DB58909}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{1DD1A0CF-F5D6-4A97-9817-6CF6DD84E21F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{1DD1A0CF-F5D6-4A97-9817-6CF6DD84E21F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

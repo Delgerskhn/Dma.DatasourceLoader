@@ -1,45 +1,56 @@
 ﻿using Dma.DatasourceLoader;
 using Dma.DatasourceLoader.Models;
-using NSubstitute;
-using NSubstitute.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tests.DatasourceLoader;
 
 namespace Tests.Integration
 {
     public class DataSourceLoaderTests
     {
-        private List<FilterCriteria> criterias = new List<FilterCriteria>()
-            {
-                new FilterCriteria
-                {
-                    DataType = DataSourceType.DateTime,
-                    FilterType = FilterType.GreaterThanOrEqual,
-                    DateValue = new DateTime(2020, 11, 5),
-                    FieldName = nameof(SampleData.DateProperty)
-                }
+        private List<FilterOption> criterias = new List<FilterOption>()
+        {
+                new FilterOption(nameof(SampleData.DateProperty), FilterOperators.NotEq, new DateTime(2020, 10, 5)),
         };
 
-        private List<OrderCriteria> orders = new List<OrderCriteria> {
-            new OrderCriteria{
-                Selector = nameof(SampleData.DateProperty),
-                Desc = "desc"
-            },
-            new OrderCriteria{
-                Selector = nameof(SampleData.IntProperty),
-                Desc = "asc"
-            }
-
+        private List<OrderOption> orders = new List<OrderOption> {
+            new OrderOption(nameof(SampleData.DateProperty),"desc"),
+            new OrderOption(nameof(SampleData.IntProperty), "asc")
             };
         private List<SampleData> source = new List<SampleData> {
             new SampleData { DateProperty = new DateTime(2020, 11, 5), IntProperty = 30 },
             new SampleData { DateProperty = new DateTime(2020, 11, 5), IntProperty = 20 },
             new SampleData { DateProperty = new DateTime(2020, 10, 5)  },
             new SampleData { DateProperty = new DateTime(2020, 12, 5)  } };
+
+        [Fact]
+        public void ShouldApplyNavigationFilter()
+        {
+            var filter1 = new FilterOption(
+                $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "text");
+            var filter2 = new FilterOption(
+                $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.IntProperty)}", FilterOperators.In, new int[] { 1, 3 });
+            List<FilterOption> filter = new List<FilterOption> { filter1,
+                filter2
+            };
+
+            List<SampleData> source = new List<SampleData> {
+            new SampleData { NestedCollection = new(){
+                new()
+                {
+                    StrProperty = "4text5",
+                    IntProperty = 1,
+                },
+                new()
+                {
+                    StrProperty = "4text5",
+                },
+            } },
+            new SampleData { DateProperty = new DateTime(2020, 11, 5), IntProperty = 20 },
+            new SampleData { DateProperty = new DateTime(2020, 10, 5)  },
+            new SampleData { DateProperty = new DateTime(2020, 12, 5)  } };
+
+            var res = DataSourceLoader.Load(source.AsQueryable(), new() { Filters = filter });
+
+            Assert.Single(res);
+        }
 
         [Fact]
         public void ShouldApplyBothFiltersAndOrders()
@@ -66,9 +77,19 @@ namespace Tests.Integration
         }
 
         [Fact]
+        public void ShouldApplyPagination()
+        {
+            var options = new DataSourceLoadOptions() { Cursor = 1, Size = 1 };
+            var res = DataSourceLoader.Load(source.AsQueryable(), options);
+
+            Assert.Single(res, (x) => x.IntProperty == 20);
+        }
+
+        [Fact]
         public void ShouldLoadFilters()
         {
-            var res = DataSourceLoader.LoadFilters<SampleData>(source.AsQueryable(), criterias);
+            var res = DataSourceLoader.ApplyFilters
+                (source.AsQueryable(), criterias);
 
 
             Assert.Collection(res, (r) =>
