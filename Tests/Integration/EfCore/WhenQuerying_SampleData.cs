@@ -19,51 +19,51 @@ namespace Tests.Integration.EfCore
                 },
                 StrProperty = "Apple"
             });
-            //db.SampleDatas.Add(new()
-            //{
-            //    IntProperty = 2,
-            //    DateProperty = new DateTime(2022, 12, 12),
-            //    NestedCollection = new List<SampleNestedData> {
-            //        new SampleNestedData(){IntProperty=2, DateProperty=new DateTime(2022,12,14),StrProperty = "Nested1"},
-            //        new SampleNestedData(){IntProperty=2, DateProperty=new DateTime(2022,12,15),StrProperty = "Nested2"},
-            //    },
-            //    StrProperty = "Sample"
-            //});
-            //db.SampleDatas.Add(new()
-            //{
-            //    IntProperty = 1,
-            //    DateProperty = new DateTime(2023, 11, 12),
-            //    NestedCollection = new List<SampleNestedData> {
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023,11,14),StrProperty = "Nested1"},
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023,11,15),StrProperty = "Nested2"},
-            //    },
-            //    StrProperty = "Triple"
-            //});
-            //db.SampleDatas.Add(new()
-            //{
-            //    IntProperty = 1,
-            //    DateProperty = new DateTime(2023, 12, 12),
-            //    NestedCollection = new List<SampleNestedData> {
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023, 12,14),StrProperty = "Nested1"},
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023, 12,15),StrProperty = "Nested2"},
-            //    },
-            //    StrProperty = "QWErty"
-            //});
-            //db.SampleDatas.Add(new()
-            //{
-            //    IntProperty = 32,
-            //    DateProperty = new DateTime(2024, 12, 12),
-            //    NestedCollection = new List<SampleNestedData> {
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,14),StrProperty = "Nested5",
-            //        DeepNestedData = new()
-            //        {
-            //            StrProperty = "DeepNestedText"
-            //        }
-            //        },
-            //        new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,15),StrProperty = "Nested2"},
-            //    },
-            //    StrProperty = "QWErty2"
-            //});
+            db.SampleDatas.Add(new()
+            {
+                IntProperty = 2,
+                DateProperty = new DateTime(2022, 12, 12),
+                NestedCollection = new List<SampleNestedData> {
+                   new SampleNestedData(){IntProperty=2, DateProperty=new DateTime(2022,12,14),StrProperty = "Nested1"},
+                   new SampleNestedData(){IntProperty=2, DateProperty=new DateTime(2022,12,15),StrProperty = "Nested2"},
+               },
+                StrProperty = "Sample"
+            });
+            db.SampleDatas.Add(new()
+            {
+                IntProperty = 1,
+                DateProperty = new DateTime(2023, 11, 12),
+                NestedCollection = new List<SampleNestedData> {
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023,11,14),StrProperty = "Nested1"},
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023,11,15),StrProperty = "Nested2"},
+               },
+                StrProperty = "Triple"
+            });
+            db.SampleDatas.Add(new()
+            {
+                IntProperty = 1,
+                DateProperty = new DateTime(2023, 12, 12),
+                NestedCollection = new List<SampleNestedData> {
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023, 12,14),StrProperty = "Nested1"},
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2023, 12,15),StrProperty = "Nested2"},
+               },
+                StrProperty = "QWErty"
+            });
+            db.SampleDatas.Add(new()
+            {
+                IntProperty = 32,
+                DateProperty = new DateTime(2024, 12, 12),
+                NestedCollection = new List<SampleNestedData> {
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,14),StrProperty = "Nested5",
+                   DeepNestedData = new()
+                   {
+                       StrProperty = "DeepNestedText"
+                   }
+                   },
+                   new SampleNestedData(){IntProperty=1, DateProperty=new DateTime(2024, 12,15),StrProperty = "Nested2"},
+               },
+                StrProperty = "QWErty2"
+            });
             db.SaveChanges();
         }
 
@@ -118,7 +118,7 @@ namespace Tests.Integration.EfCore
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
                 Filters = new List<FilterOption>
-                { 
+                {
                     new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Contains, "ple")
                 }
             });
@@ -126,7 +126,7 @@ namespace Tests.Integration.EfCore
 
             res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new() { 
+                Filters = new() {
                     new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Eq, "QWErty")
 
                 }
@@ -153,7 +153,7 @@ namespace Tests.Integration.EfCore
         [Fact]
         public void ShouldApplyFilterOnProjectedCollection()
         {
-            var query = db.SampleDatas.Select(r => new 
+            var query = db.SampleDatas.Select(r => new
             {
                 r.NestedCollection
             });
@@ -161,8 +161,8 @@ namespace Tests.Integration.EfCore
             var res = DataSourceLoader.Load(query, new()
             {
                 Filters = new List<FilterOption>
-                { 
-                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1") 
+                {
+                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
                 }
             });
 
