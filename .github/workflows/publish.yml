@@ -1,0 +1,32 @@
+# This workflow will build a .NET project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-net
+
+name: Publish Dma.DatasourceLoader
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Publish
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+      env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+    - name: Restore dependencies
+      run: dotnet restore
+    - name: Build
+      run: dotnet build --no-restore -c Release
+    - name: Pack
+      run: dotnet pack --no-build -c Release
+    - name: Publish to Nuget
+      run: dotnet nuget push $(ls ./DatasourceLoader/bin/Release/*.nupkg) -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
