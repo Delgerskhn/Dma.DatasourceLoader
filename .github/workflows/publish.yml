@@ -31,9 +31,9 @@ jobs:
     - name: Save nupkg path
       run: nupkg_file=$(ls ./DatasourceLoader/bin/Release/*.nupkg)
     - name: print
-      run: $nupkg_file
+      run: echo $nupkg_file
     - name: print api key
-      run: $NUGET_API_KEY
+      run: echo $NUGET_API_KEY
     - name: Publish to Nuget
       run: dotnet nuget push $nupkg_file -k $NUGET_API_KEY -s https://api.nuget.org/v3/index.json
     
