@@ -14,12 +14,12 @@ namespace Tests.Integration.EfCore
 
         public static ApplicationDb GetRealContext(bool reset = true)
         {
-            var context =  new ApplicationDb(
+            var context = new ApplicationDb(
                              new DbContextOptionsBuilder<ApplicationDb>()
                                  .UseSqlite("Filename=Test.db")
             .Options);
 
-            if(reset)
+            if (reset)
             {
                 context.Database.EnsureDeleted();
                 context.Database.EnsureCreated();
@@ -28,7 +28,7 @@ namespace Tests.Integration.EfCore
             return context;
         }
 
-        public static ApplicationDb GetContext(string databaseName, bool reset = true)
+        public static ApplicationDb GetInMemoryContext(string databaseName, bool reset = true)
         {
             var context = new ApplicationDb(GetOptions(databaseName));
 

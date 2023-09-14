@@ -21,18 +21,6 @@ namespace Tests.Integration.EfCore
                 .WithOne(r => r.Owner)
                 .HasForeignKey(r => r.OwnerId);
 
-            // modelBuilder.Entity<SampleData>()
-            //     .HasOne(r => r.NestedData)
-            //     .WithOne(r => r.Parent)
-            //     .HasForeignKey<SampleNestedData>(r => r.ParentId);
-
-            // modelBuilder.Entity<SampleNestedData>()
-            //     .HasOne(r => r.DeepNestedData)
-            //     .WithOne(r => r.Owner)
-            //     .HasForeignKey<DeepNestedData>(r => r.OwnerId);
-
-
-
         }
     }
 }
