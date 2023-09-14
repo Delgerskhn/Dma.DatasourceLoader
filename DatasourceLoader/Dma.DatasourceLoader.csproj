@@ -12,8 +12,8 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/delgerskhn/datasourceloader</RepositoryUrl>
     <PackageTags>IQueryable, Filters, Orders, Data source</PackageTags>
-    <PackageReleaseNotes>This is a beta release for testing purpose. Not production ready.</PackageReleaseNotes>
-    <Version>1.0.6</Version>
+    <PackageReleaseNotes>Supports more filters, able to handle deep nested filters recursively.</PackageReleaseNotes>
+    <Version>2.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
