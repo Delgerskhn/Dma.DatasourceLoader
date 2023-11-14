@@ -1,5 +1,5 @@
 ﻿using Dma.DatasourceLoader.Creator;
-using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Filters.ComplexFilters;
 using Dma.DatasourceLoader.Models;
 using NSubstitute;
 

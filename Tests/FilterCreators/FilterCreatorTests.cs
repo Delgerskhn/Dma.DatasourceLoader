@@ -3,7 +3,7 @@ using Dma.DatasourceLoader.Creator;
 using Dma.DatasourceLoader.Filters;
 using NSubstitute;
 
-namespace Tests.Filters
+namespace Tests.FilterCreators
 {
     public class FilterCreatorTests
     {
@@ -22,7 +22,7 @@ namespace Tests.Filters
             });
             var creator = new FilterCreator(analyzer);
 
-            FilterBaseBase result = creator.Create();
+            Filter result = creator.Create();
 
             Assert.NotNull(result);
             filter1.Received().CreateFilter();

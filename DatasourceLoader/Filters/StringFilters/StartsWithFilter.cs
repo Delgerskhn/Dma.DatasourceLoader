@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.StringFilters
 {
     public class StartsWithFilter<T> : FilterBase<T>
     {
@@ -19,8 +19,10 @@ namespace Dma.DatasourceLoader.Filters
             MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
             ConstantExpression constant = Expression.Constant(value);
             MethodCallExpression startsWithExpression = Expression.Call(property, startsWithMethod, constant);
+            BinaryExpression isNotNullExpression = Expression.NotEqual(property, Expression.Constant(null));
+            var notNull_startsWithExpression = Expression.AndAlso(isNotNullExpression, startsWithExpression);
 
-            return Expression.Lambda<Func<T, bool>>(startsWithExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(notNull_startsWithExpression, parameter);
         }
     }
 }

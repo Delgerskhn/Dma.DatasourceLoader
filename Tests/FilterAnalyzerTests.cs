@@ -1,7 +1,7 @@
 ﻿using Dma.DatasourceLoader.Models;
 using Dma.DatasourceLoader.Analyzer;
 
-namespace Tests.Filters
+namespace Tests
 {
     public class FilterAnalyzerTests
     {

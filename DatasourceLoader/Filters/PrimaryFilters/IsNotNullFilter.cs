@@ -1,11 +1,11 @@
 ﻿using System.Linq.Expressions;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.PrimaryFilters
 {
-    public class IsNullFilter<T> : FilterBase<T>
+    public class IsNotNullFilter<T> : FilterBase<T>
     {
 
-        public IsNullFilter(string propertyName) : base(propertyName)
+        public IsNotNullFilter(string propertyName) : base(propertyName)
         {
         }
 
@@ -14,9 +14,9 @@ namespace Dma.DatasourceLoader.Filters
             ParameterExpression parameter = Expression.Parameter(typeof(T));
             MemberExpression property = Expression.Property(parameter, propertyName);
             ConstantExpression nullValue = Expression.Constant(null, typeof(object));
-            BinaryExpression isNullExpression = Expression.Equal(property, nullValue);
+            BinaryExpression isNotNullExpression = Expression.NotEqual(property, nullValue);
 
-            return Expression.Lambda<Func<T, bool>>(isNullExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(isNotNullExpression, parameter);
         }
     }
 }

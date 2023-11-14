@@ -2,7 +2,7 @@
 
 namespace Dma.DatasourceLoader.Filters
 {
-    public abstract class FilterBaseBase
+    public abstract class Filter
     {
         public abstract LambdaExpression GetFilterExpression();
     }

@@ -1,4 +1,7 @@
 ﻿using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Filters.CompositeValueFilters;
+using Dma.DatasourceLoader.Filters.PrimaryFilters;
+using Dma.DatasourceLoader.Filters.StringFilters;
 using Dma.DatasourceLoader.Models;
 
 namespace Dma.DatasourceLoader.Creator
@@ -12,7 +15,7 @@ namespace Dma.DatasourceLoader.Creator
             this.option = option;
         }
 
-        public FilterBaseBase CreateFilter()
+        public Filter CreateFilter()
         {
             if (option.Operator == FilterOperators.Eq) return new EqualFilter<T>(option.PropertyName, option.Value);
             if (option.Operator == FilterOperators.NotEq) return new NotEqualFilter<T>(option.PropertyName, option.Value);

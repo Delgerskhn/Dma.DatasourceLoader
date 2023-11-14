@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.StringFilters
 {
-    public class NotContainsFilter<T> : FilterBase<T>
+    public class ContainsFilter<T> : FilterBase<T>
     {
         private readonly string value;
 
-        public NotContainsFilter(string propertyName, string value) : base(propertyName) 
+        public ContainsFilter(string propertyName, string value) : base(propertyName)
         {
             this.value = value;
         }
@@ -19,9 +19,11 @@ namespace Dma.DatasourceLoader.Filters
             MethodInfo containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
             ConstantExpression constant = Expression.Constant(value);
             MethodCallExpression containsExpression = Expression.Call(property, containsMethod, constant);
-            UnaryExpression notContainsExpression = Expression.Not(containsExpression);
+            BinaryExpression isNotNullExpression = Expression.NotEqual(property, Expression.Constant(null));
 
-            return Expression.Lambda<Func<T, bool>>(notContainsExpression, parameter);
+            var notNull_containsExpression = Expression.AndAlso(isNotNullExpression, containsExpression);
+
+            return Expression.Lambda<Func<T, bool>>(notNull_containsExpression, parameter);
         }
     }
 

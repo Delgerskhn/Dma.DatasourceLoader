@@ -1,12 +1,14 @@
-﻿using System.Linq.Expressions;
+﻿using Dma.DatasourceLoader.Filters.PrimaryFilters;
+using System.Linq.Expressions;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.ComplexFilters
 {
     public class NestedFilter<T> : FilterBase<T>
     {
-        private readonly FilterBaseBase _innerFilter;
+        private readonly Filter _innerFilter;
 
-        public NestedFilter(string nestedProperty, FilterBaseBase innerFilter) : base(nestedProperty) { 
+        public NestedFilter(string nestedProperty, Filter innerFilter) : base(nestedProperty)
+        {
             _innerFilter = innerFilter;
         }
         public override Expression<Func<T, bool>> GetFilterExpression()
@@ -19,7 +21,7 @@ namespace Dma.DatasourceLoader.Filters
             var invokeNotNullExpr = Expression.Invoke(notNullFilterExpression, outerParameter);
 
             var pred = _innerFilter.GetFilterExpression(); // Get the inner filter expression
-            
+
             var invokeExpression = Expression.Invoke(pred, innerProperty); // Invoke the inner filter expression with innerProperty as the argument
 
             // Combine notNullFilterExpression and invokeExpression using AndAlso

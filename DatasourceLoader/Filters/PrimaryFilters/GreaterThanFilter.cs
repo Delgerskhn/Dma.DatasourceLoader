@@ -1,6 +1,7 @@
-﻿using System.Linq.Expressions;
+﻿using Dma.DatasourceLoader.Helpers;
+using System.Linq.Expressions;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.PrimaryFilters
 {
     public class GreaterThanFilter<T> : FilterBase<T>
     {
@@ -15,7 +16,7 @@ namespace Dma.DatasourceLoader.Filters
         {
             ParameterExpression parameter = Expression.Parameter(typeof(T));
             MemberExpression property = Expression.Property(parameter, propertyName);
-            ConstantExpression constant = Expression.Constant(value);
+            ConstantExpression constant = property.ConstantForMember(value);
             BinaryExpression greaterThanExpression = Expression.GreaterThan(property, constant);
 
             return Expression.Lambda<Func<T, bool>>(greaterThanExpression, parameter);

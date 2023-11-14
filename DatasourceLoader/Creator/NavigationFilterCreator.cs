@@ -1,4 +1,5 @@
 ﻿using Dma.DatasourceLoader.Filters;
+using Dma.DatasourceLoader.Filters.ComplexFilters;
 
 namespace Dma.DatasourceLoader.Creator
 {
@@ -16,14 +17,14 @@ namespace Dma.DatasourceLoader.Creator
             _entityType = entityType;
         }
 
-        public FilterBaseBase CreateFilter()
+        public Filter CreateFilter()
         {
 
 
             var innerFilterInstance = innerFilter.CreateFilter();
 
             Type navigationFilterType = typeof(NavigationFilter<>).MakeGenericType(_entityType);
-            var filter = (FilterBaseBase)Activator.CreateInstance(navigationFilterType, _navigationProperty, innerFilterInstance)!;
+            var filter = (Filter)Activator.CreateInstance(navigationFilterType, _navigationProperty, innerFilterInstance)!;
 
             return filter;
         }

@@ -2,7 +2,7 @@
 
 namespace Dma.DatasourceLoader.Filters
 {
-    public abstract class FilterBase<T> : FilterBaseBase
+    public abstract class FilterBase<T> : Filter
     {
         protected readonly string propertyName;
         public string PropertyName { get { return propertyName; } }
