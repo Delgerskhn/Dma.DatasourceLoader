@@ -1,4 +1,4 @@
-﻿using Dma.DatasourceLoader.Filters;
+﻿using Dma.DatasourceLoader.Filters.PrimaryFilters;
 using Dma.DatasourceLoader.Models;
 using Tests.Fixture;
 

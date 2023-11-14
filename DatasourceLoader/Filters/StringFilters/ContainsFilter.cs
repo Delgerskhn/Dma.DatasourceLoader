@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.StringFilters
 {
     public class ContainsFilter<T> : FilterBase<T>
     {
         private readonly string value;
 
-        public ContainsFilter(string propertyName, string value) : base(propertyName) 
+        public ContainsFilter(string propertyName, string value) : base(propertyName)
         {
             this.value = value;
         }

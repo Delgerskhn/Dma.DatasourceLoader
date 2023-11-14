@@ -1,15 +1,16 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.CompositeValueFilters
 {
 
-    public class NotInFilter<T> : FilterBase<T>
+    public class InFilter<T> : FilterBase<T>
     {
         private readonly IEnumerable<object> values;
 
-        public NotInFilter(string propertyName, object values) : base(propertyName)
+        public InFilter(string propertyName, object values) : base(propertyName)
         {
+
             if (values is Array array && array.GetType().GetElementType() != typeof(object))
             {
                 Type elementType = array.GetType().GetElementType();
@@ -26,7 +27,6 @@ namespace Dma.DatasourceLoader.Filters
             MemberExpression property = Expression.Property(parameter, propertyName);
 
 
-
             var castedType = typeof(Enumerable)
                 .GetMethod("Cast")
                 .MakeGenericMethod(property.Type)
@@ -34,13 +34,12 @@ namespace Dma.DatasourceLoader.Filters
 
             ConstantExpression valuesArray = Expression.Constant(castedType);
             MethodInfo containsMethod = typeof(Enumerable).GetMethods()
-            .Where(m => m.Name == "Contains" && m.GetParameters().Length == 2)
-            .Single()
-            .MakeGenericMethod(property.Type);
+             .Where(m => m.Name == "Contains" && m.GetParameters().Length == 2)
+             .Single()
+             .MakeGenericMethod(property.Type);
             MethodCallExpression containsExpression = Expression.Call(null, containsMethod, valuesArray, property);
-            UnaryExpression notContainsExpression = Expression.Not(containsExpression);
 
-            return Expression.Lambda<Func<T, bool>>(notContainsExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(containsExpression, parameter);
         }
     }
 }

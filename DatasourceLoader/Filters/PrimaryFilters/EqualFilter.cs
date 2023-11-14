@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.PrimaryFilters
 {
     public class EqualFilter<T> : FilterBase<T>
     {

@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.PrimaryFilters
 {
-    public class GreaterThanFilter<T> : FilterBase<T>
+    public class LessThanOrEqualFilter<T> : FilterBase<T>
     {
         private readonly object value;
 
-        public GreaterThanFilter(string propertyName, object value) : base(propertyName)
+        public LessThanOrEqualFilter(string propertyName, object value) : base(propertyName)
         {
             this.value = value;
         }
@@ -16,9 +16,9 @@ namespace Dma.DatasourceLoader.Filters
             ParameterExpression parameter = Expression.Parameter(typeof(T));
             MemberExpression property = Expression.Property(parameter, propertyName);
             ConstantExpression constant = Expression.Constant(value);
-            BinaryExpression greaterThanExpression = Expression.GreaterThan(property, constant);
+            BinaryExpression lessThanExpression = Expression.LessThanOrEqual(property, constant);
 
-            return Expression.Lambda<Func<T, bool>>(greaterThanExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(lessThanExpression, parameter);
         }
     }
 

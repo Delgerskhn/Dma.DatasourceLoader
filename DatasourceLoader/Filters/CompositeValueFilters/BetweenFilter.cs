@@ -1,6 +1,7 @@
 ﻿using System.Linq.Expressions;
+using Dma.DatasourceLoader.Filters.PrimaryFilters;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.CompositeValueFilters
 {
     public class BetweenFilter<T> : FilterBase<T>
     {
@@ -10,8 +11,8 @@ namespace Dma.DatasourceLoader.Filters
         public BetweenFilter(string propertyName, object value) : base(propertyName)
         {
             (DateTime, DateTime) tuple = ((DateTime, DateTime))value;
-            this.minValue = tuple.Item1;
-            this.maxValue = tuple.Item2;
+            minValue = tuple.Item1;
+            maxValue = tuple.Item2;
         }
 
         public override Expression<Func<T, bool>> GetFilterExpression()

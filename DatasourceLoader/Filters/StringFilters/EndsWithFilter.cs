@@ -1,13 +1,13 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace Dma.DatasourceLoader.Filters
+namespace Dma.DatasourceLoader.Filters.StringFilters
 {
-    public class StartsWithFilter<T> : FilterBase<T>
+    public class EndsWithFilter<T> : FilterBase<T>
     {
         private readonly string value;
 
-        public StartsWithFilter(string propertyName, string value) : base(propertyName)
+        public EndsWithFilter(string propertyName, string value) : base(propertyName)
         {
             this.value = value;
         }
@@ -16,11 +16,11 @@ namespace Dma.DatasourceLoader.Filters
         {
             ParameterExpression parameter = Expression.Parameter(typeof(T));
             MemberExpression property = Expression.Property(parameter, propertyName);
-            MethodInfo startsWithMethod = typeof(string).GetMethod("StartsWith", new[] { typeof(string) })!;
+            MethodInfo endsWithMethod = typeof(string).GetMethod("EndsWith", new[] { typeof(string) })!;
             ConstantExpression constant = Expression.Constant(value);
-            MethodCallExpression startsWithExpression = Expression.Call(property, startsWithMethod, constant);
+            MethodCallExpression endsWithExpression = Expression.Call(property, endsWithMethod, constant);
 
-            return Expression.Lambda<Func<T, bool>>(startsWithExpression, parameter);
+            return Expression.Lambda<Func<T, bool>>(endsWithExpression, parameter);
         }
     }
 }
