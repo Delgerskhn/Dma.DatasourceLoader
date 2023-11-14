@@ -42,23 +42,29 @@ namespace MyProject.Controllers {
 
 The DatasourceLoader supports various filters, including:
 
-- Navigation filter (for one-to-many relationships)
-- Nested filter (for one-to-one relationships)
+- Complex filters
+  - Navigation filter (for one-to-many relationships)
+  - Nested filter (for one-to-one relationships)
+  - And filter
+  - Or filter
+- Composite value filters
+  - Between filter
+  - In filter
+  - Not in filter
+- String filters
+  - Contains filter
+  - Endswith filter
+  - Not contains filter
+  - Starts with filter
 - Primary filters
-  - Contains
-  - EndsWith
   - Equals
   - Greater than
   - Greater than or equal
-  - In
   - Not null
   - Null
   - Less than
   - Less than or equal
-  - Not contains
   - Not equal
-  - Not in
-  - Starts with
 
 # Usage
 
