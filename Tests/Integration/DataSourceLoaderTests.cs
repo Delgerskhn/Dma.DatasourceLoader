@@ -7,7 +7,7 @@ namespace Tests.Integration
     {
         private List<FilterOption> criterias = new List<FilterOption>()
         {
-                new FilterOption(nameof(SampleData.DateProperty), "not_equals", new DateTime(2020, 10, 5)),
+                new FilterOption(nameof(SampleData.DateProperty), FilterOperators.NotEq, new DateTime(2020, 10, 5)),
         };
 
         private List<OrderOption> orders = new List<OrderOption> {
@@ -24,20 +24,18 @@ namespace Tests.Integration
         public void ShouldApplyNavigationFilter()
         {
             var filter1 = new FilterOption(
-                $"{nameof(SampleData.NestedCollection)}." +
-                $"{nameof(SampleNestedData.StrProperty)}", "contains", "text");
+                $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "text");
             var filter2 = new FilterOption(
-                $"{nameof(SampleData.NestedCollection)}." +
-                $"{nameof(SampleNestedData.IntProperty)}", "in", new int[] { 1, 3 });
+                $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.IntProperty)}", FilterOperators.In, new int[] { 1, 3 });
             List<FilterOption> filter = new List<FilterOption> { filter1,
                 filter2
             };
 
             List<SampleData> source = new List<SampleData> {
-            new SampleData { NestedCollection = new(){ 
+            new SampleData { NestedCollection = new(){
                 new()
                 {
-                    StrProperty = "4text5", 
+                    StrProperty = "4text5",
                     IntProperty = 1,
                 },
                 new()
@@ -49,7 +47,7 @@ namespace Tests.Integration
             new SampleData { DateProperty = new DateTime(2020, 10, 5)  },
             new SampleData { DateProperty = new DateTime(2020, 12, 5)  } };
 
-            var res = DataSourceLoader.Load(source.AsQueryable(), new() { Filters = filter});
+            var res = DataSourceLoader.Load(source.AsQueryable(), new() { Filters = filter });
 
             Assert.Single(res);
         }

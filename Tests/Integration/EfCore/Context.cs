@@ -1,10 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Net.Mime.MediaTypeNames;
 
 namespace Tests.Integration.EfCore
 {
@@ -18,15 +12,23 @@ namespace Tests.Integration.EfCore
             .Options;
         }
 
-        //public static ApplicationDb GetRealContext()
-        //{
-        //    return new ApplicationDb(
-        //                     new DbContextOptionsBuilder<ApplicationDb>()
-        //                         .UseNpgsql("Server=localhost; Database=centric_dev; Port=5432; User Id=postgres;Password=Pass1234!")
-        //    .Options);
-        //}
+        public static ApplicationDb GetRealContext(bool reset = true)
+        {
+            var context = new ApplicationDb(
+                             new DbContextOptionsBuilder<ApplicationDb>()
+                                 .UseSqlite("Filename=Test.db")
+            .Options);
 
-        public static ApplicationDb GetContext(string databaseName, bool reset = true)
+            if (reset)
+            {
+                context.Database.EnsureDeleted();
+                context.Database.EnsureCreated();
+            }
+
+            return context;
+        }
+
+        public static ApplicationDb GetInMemoryContext(string databaseName, bool reset = true)
         {
             var context = new ApplicationDb(GetOptions(databaseName));
 

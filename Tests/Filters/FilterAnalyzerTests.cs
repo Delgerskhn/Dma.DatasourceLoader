@@ -15,12 +15,12 @@ namespace Tests.Filters
                 $"{nameof(SampleNestedData.DeepNestedData)}." +
                 $"{nameof(DeepNestedData.StrProperty)}", "equals", "text");
 
-            
-            var analyzer =  new FilterAnalyzer<SampleData>(option1);
+
+            var analyzer = new FilterAnalyzer<SampleData>(option1);
 
             Assert.NotNull(analyzer);
 
-            var option2 = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.DateProperty)}.{nameof(DeepNestedData.StrProperty)}", "equals", "text");
+            var option2 = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.DateProperty)}.{nameof(DeepNestedData.StrProperty)}", FilterOperators.Eq, "text");
 
             Assert.Throws<MissingMemberException>(() => new FilterAnalyzer<SampleData>(option2));
 

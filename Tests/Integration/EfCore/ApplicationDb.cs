@@ -15,16 +15,12 @@ namespace Tests.Integration.EfCore
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<SampleData>()
-                .Ignore(r => r.StrCollection)
-                .Ignore(r=>r.DateCollection)
-                .Ignore(r=>r.NumericCollection);
 
             modelBuilder.Entity<SampleData>()
-                .HasKey(r => r.Id);
+                .HasMany(r => r.NestedCollection)
+                .WithOne(r => r.Owner)
+                .HasForeignKey(r => r.OwnerId);
 
-            modelBuilder.Entity<SampleNestedData>()
-                .HasKey(r => r.Id);
         }
     }
 }

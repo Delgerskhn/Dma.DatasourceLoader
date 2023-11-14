@@ -1,14 +1,13 @@
 ﻿using Dma.DatasourceLoader.Analyzer;
 using Dma.DatasourceLoader.Creator;
 using Dma.DatasourceLoader.Filters;
-using Dma.DatasourceLoader.Models;
 using NSubstitute;
 
 namespace Tests.Filters
 {
     public class FilterCreatorTests
     {
-        [Fact] 
+        [Fact]
         public void ShouldCreateNestedFilter_inGivenOrder()
         {
             var analyzer = Substitute.For<IFilterAnalyzer>();
