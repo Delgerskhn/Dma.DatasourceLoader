@@ -3,7 +3,7 @@ using Dma.DatasourceLoader.Filters;
 using Dma.DatasourceLoader.Models;
 using NSubstitute;
 
-namespace Tests.Factory
+namespace Tests.Creators
 {
     public class NavigationFilterCreatorTests
     {

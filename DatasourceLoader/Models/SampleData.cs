@@ -4,7 +4,7 @@ namespace Dma.DatasourceLoader.Models
 {
     public class SampleData
     {
-        public int IntProperty { get; set; }
+        public int? IntProperty { get; set; }
         public bool BooleanProperty { get; set; }
         public DateTime DateProperty { get; set; }
         public SampleNestedData NestedData { get; set; } = new();
