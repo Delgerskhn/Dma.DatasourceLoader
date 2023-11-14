@@ -19,8 +19,11 @@ namespace Dma.DatasourceLoader.Filters.StringFilters
             MethodInfo containsMethod = typeof(string).GetMethod("Contains", new[] { typeof(string) })!;
             ConstantExpression constant = Expression.Constant(value);
             MethodCallExpression containsExpression = Expression.Call(property, containsMethod, constant);
+            BinaryExpression isNotNullExpression = Expression.NotEqual(property, Expression.Constant(null));
 
-            return Expression.Lambda<Func<T, bool>>(containsExpression, parameter);
+            var notNull_containsExpression = Expression.AndAlso(isNotNullExpression, containsExpression);
+
+            return Expression.Lambda<Func<T, bool>>(notNull_containsExpression, parameter);
         }
     }
 

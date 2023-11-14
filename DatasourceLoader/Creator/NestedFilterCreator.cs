@@ -17,12 +17,12 @@ namespace Dma.DatasourceLoader.Creator
         }
 
 
-        public FilterBaseBase CreateFilter()
+        public Filter CreateFilter()
         {
             var innerFilterInstance = innerFilter.CreateFilter();
 
             Type nestedFilterType = typeof(NestedFilter<>).MakeGenericType(entityType);
-            var filter = (FilterBaseBase)Activator.CreateInstance(nestedFilterType, _innerProperty, innerFilterInstance)!;
+            var filter = (Filter)Activator.CreateInstance(nestedFilterType, _innerProperty, innerFilterInstance)!;
 
             return filter;
         }

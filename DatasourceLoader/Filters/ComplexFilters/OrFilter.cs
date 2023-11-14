@@ -2,12 +2,12 @@
 
 namespace Dma.DatasourceLoader.Filters.ComplexFilters
 {
-    public class OrFilter<T> : FilterBaseBase
+    public class OrFilter<T> : Filter
     {
-        private readonly FilterBaseBase left;
-        private readonly FilterBaseBase right;
+        private readonly Filter left;
+        private readonly Filter right;
 
-        public OrFilter(FilterBaseBase left, FilterBaseBase right)
+        public OrFilter(Filter left, Filter right)
         {
             this.left = left;
             this.right = right;

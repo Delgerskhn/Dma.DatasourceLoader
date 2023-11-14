@@ -4,6 +4,6 @@ namespace Dma.DatasourceLoader.Creator
 {
     public interface IFilterCreator
     {
-        FilterBaseBase CreateFilter();
+        Filter CreateFilter();
     }
 }

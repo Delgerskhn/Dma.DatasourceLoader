@@ -24,7 +24,7 @@ namespace Tests.Filters
             var filter = new NotInFilter<SampleData>(nameof(SampleData.StrProperty), new string[] { "Text1" });
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
 
-            Assert.Equal(3, resp.Count);
+            Assert.Equal(5, resp.Count);
         }
 
         [Fact]
@@ -39,7 +39,7 @@ namespace Tests.Filters
 
             var filteredData = source.AsQueryable().Where(filterExpression);
 
-            Assert.Equal(1, filteredData.Count());
+            Assert.Equal(3, filteredData.Count());
         }
 
     }

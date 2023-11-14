@@ -26,7 +26,8 @@ namespace Tests.Filters
         [Fact]
         public void ItShouldApplyGtFilter()
         {
-            var filter = new GreaterThanFilter<SampleData>(nameof(SampleData.IntProperty), 1);
+            int? value = 1;
+            var filter = new GreaterThanFilter<SampleData>(nameof(SampleData.IntProperty), value);
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
             Assert.Single(resp);
 
@@ -64,7 +65,7 @@ namespace Tests.Filters
             source[0].NestedData = null!;
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
 
-            Assert.Equal(3,resp.Count);
+            Assert.Equal(5,resp.Count);
         }
 
         [Fact]
@@ -76,13 +77,21 @@ namespace Tests.Filters
 
             Assert.Single(resp);
         }
+        [Fact]
+        public void ItShouldApplyIsNullFilter_onNullableFields()
+        {
+            var filter = new IsNullFilter<SampleData>(nameof(SampleData.NullableStringProperty));
+            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
+
+            Assert.Equal(5, resp.Count);
+        }
 
         [Fact]
         public void ItShouldApplyNotEqualFilter()
         {
-            var filter = new NotEqualFilter<SampleData>(nameof(SampleData.StrProperty), "Text1");
+            var filter = new NotEqualFilter<SampleData>(nameof(SampleData.IntProperty), -20);
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
-            Assert.Equal(3, resp.Count);
+            Assert.Equal(5, resp.Count);
         }
 
     }

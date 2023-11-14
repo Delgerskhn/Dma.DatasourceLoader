@@ -13,6 +13,7 @@ namespace Dma.DatasourceLoader.Models
         public DateTime DateProperty { get; set; }
         public SampleNestedData? NestedData { get; set; } = new();
         public string StrProperty { get; set; } = "";
+        public string? NullableStringProperty { get; set; } 
         //public List<string> StrCollection { get; set; } = new();
         public List<SampleNestedData> NestedCollection { get; set; } = new List<SampleNestedData>();
         //public List<DateTime> DateCollection { get;  set; } = new();

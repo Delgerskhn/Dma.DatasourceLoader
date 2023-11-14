@@ -20,7 +20,11 @@ namespace Dma.DatasourceLoader.Filters.StringFilters
             ConstantExpression constant = Expression.Constant(value);
             MethodCallExpression endsWithExpression = Expression.Call(property, endsWithMethod, constant);
 
-            return Expression.Lambda<Func<T, bool>>(endsWithExpression, parameter);
+            BinaryExpression isNotNullExpression = Expression.NotEqual(property, Expression.Constant(null));
+            var notNull_endsWithExpression = Expression.AndAlso(isNotNullExpression, endsWithExpression);
+
+
+            return Expression.Lambda<Func<T, bool>>(notNull_endsWithExpression, parameter);
         }
     }
 }

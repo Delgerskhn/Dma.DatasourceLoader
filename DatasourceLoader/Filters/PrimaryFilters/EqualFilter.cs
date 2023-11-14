@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Dma.DatasourceLoader.Helpers;
+using System.Linq.Expressions;
 
 namespace Dma.DatasourceLoader.Filters.PrimaryFilters
 {
@@ -14,7 +15,7 @@ namespace Dma.DatasourceLoader.Filters.PrimaryFilters
         {
             ParameterExpression parameter = Expression.Parameter(typeof(T));
             MemberExpression property = Expression.Property(parameter, propertyName);
-            ConstantExpression constant = Expression.Constant(_value);
+            ConstantExpression constant = property.ConstantForMember(_value);
             BinaryExpression equalExpression = Expression.Equal(property, constant);
 
             return Expression.Lambda<Func<T, bool>>(equalExpression, parameter);

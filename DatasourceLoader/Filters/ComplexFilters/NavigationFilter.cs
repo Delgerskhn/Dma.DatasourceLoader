@@ -1,4 +1,5 @@
-﻿using System.Linq.Expressions;
+﻿using Dma.DatasourceLoader.Filters.PrimaryFilters;
+using System.Linq.Expressions;
 using System.Reflection;
 using static System.Linq.Expressions.Expression;
 
@@ -7,9 +8,9 @@ namespace Dma.DatasourceLoader.Filters.ComplexFilters
     public class NavigationFilter<T> : FilterBase<T>
     {
         private readonly string _navigationProperty;
-        private readonly FilterBaseBase _innerFilter;
+        private readonly Filter _innerFilter;
 
-        public NavigationFilter(string navigationProperty, FilterBaseBase innerFilter) : base(navigationProperty)
+        public NavigationFilter(string navigationProperty, Filter innerFilter) : base(navigationProperty)
         {
             _navigationProperty = navigationProperty;
             _innerFilter = innerFilter;

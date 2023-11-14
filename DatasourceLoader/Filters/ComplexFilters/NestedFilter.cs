@@ -1,12 +1,13 @@
-﻿using System.Linq.Expressions;
+﻿using Dma.DatasourceLoader.Filters.PrimaryFilters;
+using System.Linq.Expressions;
 
 namespace Dma.DatasourceLoader.Filters.ComplexFilters
 {
     public class NestedFilter<T> : FilterBase<T>
     {
-        private readonly FilterBaseBase _innerFilter;
+        private readonly Filter _innerFilter;
 
-        public NestedFilter(string nestedProperty, FilterBaseBase innerFilter) : base(nestedProperty)
+        public NestedFilter(string nestedProperty, Filter innerFilter) : base(nestedProperty)
         {
             _innerFilter = innerFilter;
         }

@@ -1,6 +1,8 @@
-﻿using Dma.DatasourceLoader.Filters;
-using Dma.DatasourceLoader.Filters.ComplexFilters;
+﻿using Dma.DatasourceLoader.Filters.ComplexFilters;
+using Dma.DatasourceLoader.Filters.PrimaryFilters;
+using Dma.DatasourceLoader.Filters.StringFilters;
 using Dma.DatasourceLoader.Models;
+using System.Linq.Expressions;
 using Tests.Fixture;
 
 namespace Tests.Filters
@@ -11,6 +13,32 @@ namespace Tests.Filters
 
         public ComplexFilterTests() {
             source = SampleDataCollection.CreateCollection();
+        }
+
+        [Fact]
+        public void ShouldApplyAndFilter()
+        {
+            var filter = new GreaterThanOrEqualFilter<SampleData>("IntProperty", 1);
+            var filter1 = new ContainsFilter<SampleData>("NullableStringProperty", "null");
+            var andExpr = new AndFilter<SampleData>(filter, filter1).GetFilterExpression();
+
+            var result = source.AsQueryable().Where((Expression<Func<SampleData, bool>>)andExpr);
+            Assert.Single(result);
+        }
+
+        [Fact]
+        public void ShouldApplyOrFilter()
+        {
+            var filter1 = new EqualFilter<SampleData>("IntProperty", 1);
+            var filter2 = new EqualFilter<SampleData>("IntProperty", 0);
+            var filter3 = new EqualFilter<SampleData>("IntProperty", -20);
+
+            var or1 = new OrFilter<SampleData>(filter1, filter2);
+            var or2 = new OrFilter<SampleData>(or1, filter3);
+
+            var result = source.AsQueryable().Where((Expression<Func<SampleData, bool>>)or2.GetFilterExpression());
+
+            Assert.Equal(3, result.Count());
         }
 
 

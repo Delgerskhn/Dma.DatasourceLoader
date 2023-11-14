@@ -22,7 +22,7 @@ namespace Tests.FilterCreators
             });
             var creator = new FilterCreator(analyzer);
 
-            FilterBaseBase result = creator.Create();
+            Filter result = creator.Create();
 
             Assert.NotNull(result);
             filter1.Received().CreateFilter();

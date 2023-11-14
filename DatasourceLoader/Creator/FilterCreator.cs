@@ -12,9 +12,9 @@ namespace Dma.DatasourceLoader.Creator
             this.analyzer = analyzer;
         }
 
-        public FilterBaseBase Create()
+        public Filter Create()
         {
-            FilterBaseBase? expression = null;
+            Filter? expression = null;
             IFilterCreator? lastFilter = null;
             analyzer.GetCreators().ForEach(creator =>
             {

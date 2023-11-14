@@ -24,12 +24,30 @@ namespace Tests.Filters
         }
 
         [Fact]
+        public void ItShouldApplyContainsFilter_onNullableFields()
+        {
+            var filter = new ContainsFilter<SampleData>(nameof(SampleData.NullableStringProperty), "null");
+            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
+
+            Assert.Single(resp);
+        }
+
+        [Fact]
         public void ItShouldApplyNotContainsFilter()
         {
             var filter = new NotContainsFilter<SampleData>(nameof(SampleData.StrProperty), "Text1");
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
 
-            Assert.Equal(3, resp.Count);
+            Assert.Equal(5, resp.Count);
+        }
+
+        [Fact]
+        public void ItShouldApplyNotContainsFilterOnNullableFields()
+        {
+            var filter = new NotContainsFilter<SampleData>(nameof(SampleData.NullableStringProperty), "null");
+            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
+
+            Assert.Equal(5,resp.Count);
         }
 
         [Fact]
@@ -42,11 +60,32 @@ namespace Tests.Filters
         }
 
 
+        [Fact]
+        public void ItShouldApplyEndsWithFilter_onNullableFields()
+        {
+            var filter = new EndsWithFilter<SampleData>(nameof(SampleData.NullableStringProperty), "able");
+            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
+            Assert.Single(resp);
+
+        }
+
+
 
         [Fact]
         public void ItShouldApplyStartsWithFilter()
         {
             var filter = new StartsWithFilter<SampleData>(nameof(SampleData.StrProperty), "Text1");
+            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
+            Assert.Single(resp);
+        }
+
+
+
+
+        [Fact]
+        public void ItShouldApplyStartsWithFilter_onNullableFields()
+        {
+            var filter = new StartsWithFilter<SampleData>(nameof(SampleData.NullableStringProperty), "null");
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
             Assert.Single(resp);
         }

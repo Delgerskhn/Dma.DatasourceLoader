@@ -20,8 +20,11 @@ namespace Dma.DatasourceLoader.Filters.StringFilters
             ConstantExpression constant = Expression.Constant(value);
             MethodCallExpression containsExpression = Expression.Call(property, containsMethod, constant);
             UnaryExpression notContainsExpression = Expression.Not(containsExpression);
+            BinaryExpression isNullExpression = Expression.Equal(property, Expression.Constant(null));
 
-            return Expression.Lambda<Func<T, bool>>(notContainsExpression, parameter);
+            var notNull_notContainsExpression = Expression.OrElse(isNullExpression, notContainsExpression);
+
+            return Expression.Lambda<Func<T, bool>>(notNull_notContainsExpression, parameter);
         }
     }
 

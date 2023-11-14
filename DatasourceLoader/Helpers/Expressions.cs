@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Dma.DatasourceLoader.Helpers
 {
-    public class Expressions
+    public static class Expressions
     {
         public static Expression CastNonNullable(MemberExpression property)
         {
@@ -17,6 +17,19 @@ namespace Dma.DatasourceLoader.Helpers
             }
 
             return propertyValue;
+        }
+
+        public static ConstantExpression ConstantForMember(this MemberExpression expression, object value)
+        {
+            Type expressionType = expression.Type;
+
+            if (expressionType.IsGenericType && expressionType.GetGenericTypeDefinition() == typeof(Nullable<>))
+            {
+                var underlyingType = Nullable.GetUnderlyingType(expressionType);
+                value = Convert.ChangeType(value, underlyingType!);
+            }
+
+            return Expression.Constant(value, expression.Type);
         }
     }
 }
