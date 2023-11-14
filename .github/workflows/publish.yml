@@ -26,7 +26,8 @@ jobs:
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore -c Release
-    - run: dotnet test --no-build --configuration Release
+    - name: Test
+      run: dotnet test --no-build --configuration Release
     - name: Pack
       run: dotnet pack --no-build -c Release
     - if: ${{ env.PUSH_PACKAGES }}
