@@ -14,7 +14,6 @@ namespace Tests.Filters
 
 
 
-
         [Fact]
         public void ItShouldApplyContainsFilter()
         {

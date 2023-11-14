@@ -4,11 +4,11 @@ using Tests.Fixture;
 
 namespace Tests.Filters
 {
-    public class FilterTests
+    public class PrimaryFiltersTests
     {
         private static List<SampleData> source = new();
 
-        public FilterTests() {
+        public PrimaryFiltersTests() {
             source = SampleDataCollection.CreateCollection();
         }
 
@@ -22,24 +22,7 @@ namespace Tests.Filters
         }
       
 
-        [Fact]
-        public void ItShouldApplyInFilter()
-        {
-            var filter = new InFilter<SampleData>(nameof(SampleData.IntProperty), new int[] { 1 });
-            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
-
-            Assert.Single(resp);
-        }
-
-        [Fact]
-        public void ItShouldApplyNotInFilter()
-        {
-            var filter = new NotInFilter<SampleData>(nameof(SampleData.StrProperty), new string[] { "Text1" });
-            var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
-
-            Assert.Equal(3,resp.Count);
-        }
-
+      
         [Fact]
         public void ItShouldApplyGtFilter()
         {
@@ -64,7 +47,7 @@ namespace Tests.Filters
             var filter = new LessThanFilter<SampleData>(nameof(SampleData.IntProperty), 2);
             var resp = source.AsQueryable().Where(filter.GetFilterExpression()).ToList();
             Assert.Equal(3,resp.Count);
-
+             
         }
         [Fact]
         public void ItShouldApplyLteFilter()

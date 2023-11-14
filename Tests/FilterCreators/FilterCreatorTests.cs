@@ -3,7 +3,7 @@ using Dma.DatasourceLoader.Creator;
 using Dma.DatasourceLoader.Filters;
 using NSubstitute;
 
-namespace Tests.Filters
+namespace Tests.FilterCreators
 {
     public class FilterCreatorTests
     {
