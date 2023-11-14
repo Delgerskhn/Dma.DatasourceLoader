@@ -6,14 +6,16 @@ namespace Dma.DatasourceLoader.Filters.CompositeValueFilters
 
     public class InFilter<T> : FilterBase<T>
     {
-        private readonly IEnumerable<object> values;
+        private readonly IEnumerable<object>? values;
 
         public InFilter(string propertyName, object values) : base(propertyName)
         {
-
+            if (values == null)
+            {
+                throw new ArgumentNullException(nameof(values));
+            }
             if (values is Array array && array.GetType().GetElementType() != typeof(object))
             {
-                Type elementType = array.GetType().GetElementType();
                 this.values = array.Cast<object>();
                 return;
             }
@@ -28,9 +30,9 @@ namespace Dma.DatasourceLoader.Filters.CompositeValueFilters
 
 
             var castedType = typeof(Enumerable)
-                .GetMethod("Cast")
+                .GetMethod("Cast")!
                 .MakeGenericMethod(property.Type)
-                .Invoke(null, new object[] { values });
+                .Invoke(null, new object[] { values! });
 
             ConstantExpression valuesArray = Expression.Constant(castedType);
             MethodInfo containsMethod = typeof(Enumerable).GetMethods()
