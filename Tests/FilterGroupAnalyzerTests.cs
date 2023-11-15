@@ -1,4 +1,7 @@
-﻿using Dma.DatasourceLoader.Models;
+﻿using Dma.DatasourceLoader;
+using Dma.DatasourceLoader.Analyzer;
+using Dma.DatasourceLoader.Filters.ComplexFilters;
+using Dma.DatasourceLoader.Models;
 
 namespace Tests
 {
@@ -6,28 +9,71 @@ namespace Tests
     {
 
         [Fact]
-        public void ShouldGroupAndFilters()
+        public void ShouldAnalyzeAndFilterCreator()
         {
-            var group = new FilterGroup(new FilterGroupItem[] { 
-                new FilterGroupItem.And(new FilterRule("StrProperty", FilterOperators.StartsWith, "Text")),
-                new FilterGroupItem.Or(new FilterGroupItem.SubGroup(
-                    new FilterGroupItem[] {
-                        new FilterGroupItem.And(new FilterRule("IntProperty", FilterOperators.Eq, 1)),
-                        new FilterGroupItem.And(new FilterRule("StrProperty", FilterOperators.Contains, "Text"))
-                    }
-                ))
-            });
+            var group = new FilterGroup(
+                new FilterExpression[] { 
+                    new FilterGroup.And(new FilterRule("StrProperty", FilterOperators.StartsWith, "Text")),
+                    new FilterGroup.And(new FilterRule("IntProperty", FilterOperators.Eq, 1))
+                });
 
             var analyzer = new FilterGroupAnalyzer<SampleData>(group);
 
-            var expr = analyzer.Analyze();
+            var andCreator = analyzer.GetCreators();
 
-            //Assert correct condition was composed 
-            //x=> x.StrProperty.StartsWith("Text") || (x.IntProperty == 1 && x.StrProperty.Contains("Text"))
-            
+            Assert.IsType<AndFilterCreator>(andCreator);
         }
 
         [Fact]
-        public void ShouldGroupOrFilters() { }
+        public void ShouldAnalyzeOrFilterCreator() { 
+            var group = new FilterGroup(
+                new FilterExpression[] { 
+                    new FilterGroup.And(new FilterRule("StrProperty", FilterOperators.StartsWith, "Text")),
+                    new FilterGroup.Or(new FilterRule("IntProperty", FilterOperators.Eq, 1))
+                });
+
+            var analyzer = new FilterGroupAnalyzer<SampleData>(group);
+
+            var andCreator = analyzer.GetCreators();
+
+            Assert.IsType<OrFilterCreator>(andCreator);
+
+        }
+
+        [Fact]
+        public void ShouldAnalyzeSubgroupFilterCreator() {
+            var group = new FilterGroup(
+                new FilterExpression[] { 
+                    new FilterGroup.And(
+                        new FilterRule("IntProperty", FilterOperators.Eq, 1)
+                    ),
+                    new FilterGroup.Or(
+                        new FilterGroup(new FilterExpression[]{
+                            new FilterGroup.And(new FilterRule("StrProperty", FilterOperators.Contains, "Text"))
+                        })
+                    ),
+                });
+            var analyzer = new FilterGroupAnalyzer<SampleData>(group);
+            var orFilter = analyzer.GetCreators();
+
+            Assert.IsType<OrFilterCreator>(orFilter);
+        }
+
+        [Fact]
+        public void ShouldThrowError_ifGroupsAreNestedWithoutLogicOperator() {
+             var group = new FilterGroup(
+                new FilterExpression[] { 
+                    new FilterGroup.And(
+                        new FilterRule("IntProperty", FilterOperators.Eq, 1)
+                    ),
+                    new FilterGroup(new FilterExpression[]{
+                            new FilterGroup.And(new FilterRule("StrProperty", FilterOperators.Contains, "Text"))
+                    })
+                });
+            var analyzer = new FilterGroupAnalyzer<SampleData>(group);
+            Assert.Throws<NotSupportedException>(()=>{
+                analyzer.GetCreators();
+            });
+        }
     }
 }

@@ -1,24 +1,20 @@
 ﻿namespace Dma.DatasourceLoader.Models
 {
-    public class FilterGroup 
+    public record FilterGroup : FilterExpression
     {
-        private readonly FilterGroupItem[] items;
-        public FilterGroupItem[] Items => items;
-        public FilterGroup(FilterGroupItem[] items)
+        private readonly FilterExpression[] expressions;
+        public FilterExpression[] Expressions => expressions;
+        public FilterGroup(FilterExpression[] expressions)
         {
-            this.items = items;
+            this.expressions = expressions;
         }
+
+        public record And(FilterExpression expr) : FilterExpression();
+        public record Or(FilterExpression expr) : FilterExpression();
     }
 
 
     public record FilterExpression
     {
-    }
-
-    public record FilterGroupItem : FilterExpression
-    {
-        public record And(FilterExpression expr) : FilterGroupItem();
-        public record Or(FilterExpression expr) : FilterGroupItem();
-        public record SubGroup(FilterExpression[] exprs) : FilterGroupItem();
     }
 }
