@@ -5,9 +5,9 @@ namespace Tests.Integration
 {
     public class DataSourceLoaderTests
     {
-        private List<FilterOption> criterias = new List<FilterOption>()
+        private List<FilterRule> criterias = new List<FilterRule>()
         {
-                new FilterOption(nameof(SampleData.DateProperty), FilterOperators.NotEq, new DateTime(2020, 10, 5)),
+                new FilterRule(nameof(SampleData.DateProperty), FilterOperators.NotEq, new DateTime(2020, 10, 5)),
         };
 
         private List<OrderOption> orders = new List<OrderOption> {
@@ -23,11 +23,11 @@ namespace Tests.Integration
         [Fact]
         public void ShouldApplyNavigationFilter()
         {
-            var filter1 = new FilterOption(
+            var filter1 = new FilterRule(
                 $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "text");
-            var filter2 = new FilterOption(
+            var filter2 = new FilterRule(
                 $"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.IntProperty)}", FilterOperators.In, new int[] { 1, 3 });
-            List<FilterOption> filter = new List<FilterOption> { filter1,
+            List<FilterRule> filter = new List<FilterRule> { filter1,
                 filter2
             };
 

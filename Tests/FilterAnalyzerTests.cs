@@ -10,7 +10,7 @@ namespace Tests
         public void ItShouldAnalyzeExistenceOfPropertiesRecursively_inFilterOption()
         {
 
-            var option1 = new FilterOption($"" +
+            var option1 = new FilterRule($"" +
                 $"{nameof(SampleData.NestedCollection)}." +
                 $"{nameof(SampleNestedData.DeepNestedData)}." +
                 $"{nameof(DeepNestedData.StrProperty)}", "equals", "text");
@@ -20,7 +20,7 @@ namespace Tests
 
             Assert.NotNull(analyzer);
 
-            var option2 = new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.DateProperty)}.{nameof(DeepNestedData.StrProperty)}", FilterOperators.Eq, "text");
+            var option2 = new FilterRule($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.DateProperty)}.{nameof(DeepNestedData.StrProperty)}", FilterOperators.Eq, "text");
 
             Assert.Throws<MissingMemberException>(() => new FilterAnalyzer<SampleData>(option2));
 
@@ -29,7 +29,7 @@ namespace Tests
         [Fact]
         public void ItShouldPopulateCreators_inNestedOrder()
         {
-            var option1 = new FilterOption($"" +
+            var option1 = new FilterRule($"" +
                 $"{nameof(SampleData.NestedCollection)}." +
                 $"{nameof(SampleNestedData.DeepNestedData)}." +
                 $"{nameof(DeepNestedData.StrProperty)}", "equals", "text");

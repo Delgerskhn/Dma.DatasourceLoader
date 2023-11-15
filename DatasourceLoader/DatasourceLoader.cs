@@ -34,7 +34,7 @@ namespace Dma.DatasourceLoader
             return query.Skip(skipCount).Take(size);
         }
 
-        public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterOption> filters) where T : class
+        public static IQueryable<T> ApplyFilters<T>(IQueryable<T> query, List<FilterRule> filters) where T : class
         {
             foreach(var f in filters)
             {

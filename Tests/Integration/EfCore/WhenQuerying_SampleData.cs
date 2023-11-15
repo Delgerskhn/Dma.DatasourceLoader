@@ -72,9 +72,9 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
-                    new FilterOption($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
+                    new FilterRule($"{nameof(SampleData.NestedCollection)}.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
                 }
             });
 
@@ -87,9 +87,9 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
-                    new FilterOption($"{nameof(SampleData.DateProperty)}", FilterOperators.Gte, new DateTime(2023,12,12))
+                    new FilterRule($"{nameof(SampleData.DateProperty)}", FilterOperators.Gte, new DateTime(2023,12,12))
 
                 }
             });
@@ -102,9 +102,9 @@ namespace Tests.Integration.EfCore
         {
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
-                    new FilterOption($"{nameof(SampleData.IntProperty)}", FilterOperators.Lt, 20)
+                    new FilterRule($"{nameof(SampleData.IntProperty)}", FilterOperators.Lt, 20)
                 }
             });
 
@@ -117,9 +117,9 @@ namespace Tests.Integration.EfCore
 
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
-                    new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Contains, "ple")
+                    new FilterRule($"{nameof(SampleData.StrProperty)}", FilterOperators.Contains, "ple")
                 }
             });
             Assert.Equal(3, res.Count());
@@ -127,7 +127,7 @@ namespace Tests.Integration.EfCore
             res = DataSourceLoader.Load(db.SampleDatas, new()
             {
                 Filters = new() {
-                    new FilterOption($"{nameof(SampleData.StrProperty)}", FilterOperators.Eq, "QWErty")
+                    new FilterRule($"{nameof(SampleData.StrProperty)}", FilterOperators.Eq, "QWErty")
 
                 }
             });
@@ -139,10 +139,10 @@ namespace Tests.Integration.EfCore
         public void ShouldApplyFilterOnDeepNestedObject()
         {
             //SampleData.NestedCollection.NestedObject.StrProperty Equals SampleText
-            var filter = new FilterOption($"NestedCollection.DeepNestedData.StrProperty", FilterOperators.Contains, "DeepNestedText");
+            var filter = new FilterRule($"NestedCollection.DeepNestedData.StrProperty", FilterOperators.Contains, "DeepNestedText");
             var res = DataSourceLoader.Load(db.SampleDatas, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
                     filter
                 }
@@ -160,9 +160,9 @@ namespace Tests.Integration.EfCore
 
             var res = DataSourceLoader.Load(query, new()
             {
-                Filters = new List<FilterOption>
+                Filters = new List<FilterRule>
                 {
-                    new FilterOption($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
+                    new FilterRule($"NestedCollection.{nameof(SampleNestedData.StrProperty)}", FilterOperators.Contains, "Nested1")
                 }
             });
 

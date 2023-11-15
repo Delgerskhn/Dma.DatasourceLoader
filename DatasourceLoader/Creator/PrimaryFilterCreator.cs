@@ -8,9 +8,9 @@ namespace Dma.DatasourceLoader.Creator
 {
     public class PrimaryFilterCreator<T> : IFilterCreator where T : class
     {
-        private readonly FilterOption option;
+        private readonly FilterRule option;
 
-        public PrimaryFilterCreator(FilterOption option)
+        public PrimaryFilterCreator(FilterRule option)
         {
             this.option = option;
         }

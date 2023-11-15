@@ -5,10 +5,10 @@ namespace Dma.DatasourceLoader.Analyzer
 {
     public class FilterAnalyzer<T> : IFilterAnalyzer where T : class
     {
-        public FilterOption option;
+        public FilterRule option;
         private Stack<(string, Type, FilterCreatorTypes)> properties = new Stack<(string, Type, FilterCreatorTypes)>();
 
-        public FilterAnalyzer(FilterOption option)
+        public FilterAnalyzer(FilterRule option)
         {
             this.option = option;
             DiscoverProperties();
